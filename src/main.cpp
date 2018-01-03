@@ -1269,7 +1269,7 @@ int64_t GetBlockValue(int nHeight, int64_t nFees)
 int64_t GetProofOfStakeReward(int64_t nCoinAge, int64_t nFees)
 {
     int64_t nSubsidy = 0;
-    if(nHeight < 93400){
+    if(chainActive.Tip()->nHeight < 93400){
         nSubsidy = 25 * 0.00001 * COIN;
     }
 
