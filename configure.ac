@@ -721,12 +721,12 @@ AC_CONFIG_FILES([qa/pull-tester/build-tests.sh],[chmod +x qa/pull-tester/build-t
 AC_OUTPUT
 
 dnl Taken from https://wiki.debian.org/RpathIssue
-case ${host} in
- *-pc-linux-gnu)
-   AC_MSG_RESULT([Fixing libtool for -rpath problems.])
-   sed < libtool > libtool-2 \
-   's/^hardcode_libdir_flag_spec.*$'/'hardcode_libdir_flag_spec=" -D__LIBTOOL_IS_A_FOOL__ "/'
-   mv libtool-2 libtool
-   chmod 755 libtool
- ;;
-esac
+dnl case ${host} in
+dnl  *-pc-linux-gnu)
+dnl    AC_MSG_RESULT([Fixing libtool for -rpath problems.])
+dnl    sed < libtool > libtool-2 \
+dnl    's/^hardcode_libdir_flag_spec.*$'/'hardcode_libdir_flag_spec=" -D__LIBTOOL_IS_A_FOOL__ "/'
+dnl    mv libtool-2 libtool
+dnl    chmod 755 libtool
+dnl  ;;
+dnl esac
