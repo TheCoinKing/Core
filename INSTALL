@@ -1,0 +1,5 @@
+Building coinking
+
+See doc/build-*.md for instructions on building coinkingd,
+the intended-for-services, no-graphical-interface, reference
+implementation of coinking.
