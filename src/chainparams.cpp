@@ -70,14 +70,14 @@ public:
         hashGenesisBlock = uint256("0x01");
         if (genesis.GetHash() != hashGenesisBlock)
         {
-            Logprintf("recalculating params for mainnet.\n");
-            Logprintf("old mainnet genesis nonce: %u\n", genesis.nNonce);
-            Logprintf("old mainnet genesis hash:  %s\n", hashGenesisBlock.ToString().c_str());
+            LogPrintf("recalculating params for mainnet.\n");
+            LogPrintf("old mainnet genesis nonce: %u\n", genesis.nNonce);
+            LogPrintf("old mainnet genesis hash:  %s\n", hashGenesisBlock.ToString().c_str());
             // deliberately empty for loop finds nonce value.
             for(genesis.nNonce = 0; CBigNum(genesis.GetHash()) > bnProofOfWorkLimit; genesis.nNonce++){ } 
-            Logprintf("new mainnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
-            Logprintf("new mainnet genesis nonce: %u\n", genesis.nNonce); 
-            Logprintf("new mainnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
+            LogPrintf("new mainnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
+            LogPrintf("new mainnet genesis nonce: %u\n", genesis.nNonce); 
+            LogPrintf("new mainnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
         }
 
         hashGenesisBlock = genesis.GetHash();
