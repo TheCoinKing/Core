@@ -192,25 +192,12 @@ public:
         nLastProofOfWorkHeight = 350 - 1;
         genesis.nTime = 1401051600;
         genesis.nBits = 0x207fffff;
-        genesis.nNonce = 3;
+        genesis.nNonce = 0;
         hashGenesisBlock = genesis.GetHash();
         nDefaultPort = 56444;
         strDataDir = "regtest";
         
-        //GENESIS HASH
-        hashGenesisBlock = uint256("0x01");
-        if (genesis.GetHash() != hashGenesisBlock)
-        {
-            LogPrintf("recalculating params for mainnet.\n");
-            LogPrintf("old mainnet genesis nonce: %u\n", genesis.nNonce);
-            LogPrintf("old mainnet genesis hash:  %s\n", hashGenesisBlock.ToString().c_str());
-            // deliberately empty for loop finds nonce value.
-            for(genesis.nNonce = 0; CBigNum(genesis.GetHash()) > bnProofOfWorkLimit; genesis.nNonce++){ } 
-            LogPrintf("new mainnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
-            LogPrintf("new mainnet genesis nonce: %u\n", genesis.nNonce); 
-            LogPrintf("new mainnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
-        }
-        assert(hashGenesisBlock == uint256("0x0472dc040de80ded8bd385a2b6bc6e4e05cb6432047efa07692724c6ccef40ac"));
+        assert(hashGenesisBlock == uint256("0x37ef43504ca1878a897ce067937c952372998aa615670367c218c44b189d8303"));
 
         vSeeds.clear();  // Regtest mode doesn't have any DNS seeds.
     }
