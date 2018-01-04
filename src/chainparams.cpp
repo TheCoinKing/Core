@@ -64,58 +64,59 @@ public:
         genesis.nVersion = 1;
         genesis.nTime    = 1514999815;
         genesis.nBits    = 0x1e0ffff0;
-        genesis.nNonce   = 829025;
+        genesis.nNonce   = 3696673;
 
         // If genesis block hash does not match, then generate new genesis hash.
-        if (true && genesis.GetHash() != hashGenesisBlock)
-        {
-            printf("Searching for genesis block...\n");
-            // This will figure out a valid hash and Nonce if you're
-            // creating a different genesis block:
-            uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
-            uint256 thash;
-            char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
+//         if (true && genesis.GetHash() != hashGenesisBlock)
+//         {
+//             printf("Searching for genesis block...\n");
+//             // This will figure out a valid hash and Nonce if you're
+//             // creating a different genesis block:
+//             uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
+//             uint256 thash;
+//             char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
  
-            while(true)
-            {
-#if defined(USE_SSE2)
-                // Detection would work, but in cases where we KNOW it always has SSE2,
-                // it is faster to use directly than to use a function pointer or conditional.
-#if defined(_M_X64) || defined(__x86_64__) || defined(_M_AMD64) || (defined(MAC_OSX) && defined(__i386__))
-                // Always SSE2: x86_64 or Intel MacOS X
-                scrypt_1024_1_1_256_sp_sse2(BEGIN(genesis.nVersion), BEGIN(thash), scratchpad);
-#else
-                // Detect SSE2: 32bit x86 Linux or Windows
-                scrypt_1024_1_1_256_sp(BEGIN(genesis.nVersion), BEGIN(thash), scratchpad);
-#endif
-#else
-                // Generic scrypt
-                scrypt_1024_1_1_256_sp_generic(BEGIN(genesis.nVersion), BEGIN(thash), scratchpad);
-#endif
-                if (thash <= hashTarget)
-                    break;
-                if ((genesis.nNonce & 0xFFF) == 0)
-                {
-                    LogPrintf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
-                }
-                ++genesis.nNonce;
-                if (genesis.nNonce == 0)
-                {
-                    LogPrintf("NONCE WRAPPED, incrementing time\n");
-                    ++genesis.nTime;
-                }
-            }
-            LogPrintf("block.nTime = %u \n", genesis.nTime);
-            LogPrintf("block.nNonce = %u \n", genesis.nNonce);
-            LogPrintf("block.GetHash = %s\n", genesis.GetHash().ToString().c_str());
-        }
+//             while(true)
+//             {
+// #if defined(USE_SSE2)
+//                 // Detection would work, but in cases where we KNOW it always has SSE2,
+//                 // it is faster to use directly than to use a function pointer or conditional.
+// #if defined(_M_X64) || defined(__x86_64__) || defined(_M_AMD64) || (defined(MAC_OSX) && defined(__i386__))
+//                 // Always SSE2: x86_64 or Intel MacOS X
+//                 scrypt_1024_1_1_256_sp_sse2(BEGIN(genesis.nVersion), BEGIN(thash), scratchpad);
+// #else
+//                 // Detect SSE2: 32bit x86 Linux or Windows
+//                 scrypt_1024_1_1_256_sp(BEGIN(genesis.nVersion), BEGIN(thash), scratchpad);
+// #endif
+// #else
+//                 // Generic scrypt
+//                 scrypt_1024_1_1_256_sp_generic(BEGIN(genesis.nVersion), BEGIN(thash), scratchpad);
+// #endif
+//                 if (thash <= hashTarget)
+//                     break;
+//                 if ((genesis.nNonce & 0xFFF) == 0)
+//                 {
+//                     LogPrintf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
+//                 }
+//                 ++genesis.nNonce;
+//                 if (genesis.nNonce == 0)
+//                 {
+//                     LogPrintf("NONCE WRAPPED, incrementing time\n");
+//                     ++genesis.nTime;
+//                 }
+//             }
+//             LogPrintf("block.nTime = %u \n", genesis.nTime);
+//             LogPrintf("block.nNonce = %u \n", genesis.nNonce);
+//             LogPrintf("block.GetHash = %s\n", genesis.GetHash().ToString().c_str());
+//         }
 
         hashGenesisBlock = genesis.GetHash();
-        assert(hashGenesisBlock == uint256("0x0000079a1a12b3f247279659e86456e4191deddfa1a2dc4c21a81dcd4a1afa3c"));
+        assert(hashGenesisBlock == uint256("0xd9e128be81987a6878f54775494806885ac007a060161a954a33172046c4a5fc"));
         assert(genesis.hashMerkleRoot == uint256("0xbaacbd35f57d1a863ca824c32e38dcaf2a67b44d89f72e324ad566af85a47cc8"));
 
         vSeeds.push_back(CDNSSeedData("104.131.33.106", "104.131.33.106"));
-
+        vSeeds.push_back(CDNSSeedData("95.85.38.235", "95.85.38.235"));
+        
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,61);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,5);
         base58Prefixes[SECRET_KEY] =     std::vector<unsigned char>(1,189);
