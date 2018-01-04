@@ -64,7 +64,7 @@ public:
         genesis.nVersion = 1;
         genesis.nTime    = 1514999815;
         genesis.nBits    = 0x1e0ffff0;
-        genesis.nNonce   = 829025;
+        genesis.nNonce   = 3696673;
 
         // If genesis block hash does not match, then generate new genesis hash.
         if (true && genesis.GetHash() != hashGenesisBlock)
@@ -111,7 +111,7 @@ public:
         }
 
         hashGenesisBlock = genesis.GetHash();
-        assert(hashGenesisBlock == uint256("0x0000079a1a12b3f247279659e86456e4191deddfa1a2dc4c21a81dcd4a1afa3c"));
+        assert(hashGenesisBlock == uint256("0xd9e128be81987a6878f54775494806885ac007a060161a954a33172046c4a5fc"));
         assert(genesis.hashMerkleRoot == uint256("0xbaacbd35f57d1a863ca824c32e38dcaf2a67b44d89f72e324ad566af85a47cc8"));
 
         vSeeds.push_back(CDNSSeedData("104.131.33.106", "104.131.33.106"));
