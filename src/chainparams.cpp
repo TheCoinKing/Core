@@ -72,11 +72,11 @@ public:
             printf("Searching for genesis block...\n");
             // This will figure out a valid hash and Nonce if you're
             // creating a different genesis block:
-            uint256 hashTarget = CBigNum().SetCompact(block.nBits).getuint256();
+            uint256 hashTarget = CBigNum().SetCompact(genesis.nBits).getuint256();
             uint256 thash;
             char scratchpad[SCRYPT_SCRATCHPAD_SIZE];
  
-            white(true)
+            while(true)
             {
 #if defined(USE_SSE2)
                 // Detection would work, but in cases where we KNOW it always has SSE2,
@@ -96,18 +96,18 @@ public:
                     break;
                 if ((block.nNonce & 0xFFF) == 0)
                 {
-                    LogPrintf("nonce %08X: hash = %s (target = %s)\n", block.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
+                    LogPrintf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
                 }
-                ++block.nNonce;
-                if (block.nNonce == 0)
+                ++genesis.nNonce;
+                if (genesis.nNonce == 0)
                 {
                     LogPrintf("NONCE WRAPPED, incrementing time\n");
-                    ++block.nTime;
+                    ++genesis.nTime;
                 }
             }
-            LogPrintf("block.nTime = %u \n", block.nTime);
-            LogPrintf("block.nNonce = %u \n", block.nNonce);
-            LogPrintf("block.GetHash = %s\n", block.GetHash().ToString().c_str());
+            LogPrintf("block.nTime = %u \n", genesis.nTime);
+            LogPrintf("block.nNonce = %u \n", genesis.nNonce);
+            LogPrintf("block.GetHash = %s\n", genesis.GetHash().ToString().c_str());
         }
 
         hashGenesisBlock = genesis.GetHash();
