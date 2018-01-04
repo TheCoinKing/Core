@@ -64,7 +64,7 @@ public:
         genesis.nVersion = 1;
         genesis.nTime    = 1514999815;
         genesis.nBits    = 0x1e0ffff0;
-        genesis.nNonce   = 22258345;
+        genesis.nNonce   = 829025;
 
 //         //GENESIS HASH
 //         hashGenesisBlock = uint256("0x01");
