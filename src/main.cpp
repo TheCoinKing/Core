@@ -1433,9 +1433,9 @@ unsigned int static KimotoGravityWell(const CBlockIndex* pindexLast, const CBloc
 
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader *pblock)
 {
-    //Genesis
-    if (pindexLast == NULL)
-        return CBigNum(~uint256(0) >> 20).GetCompact(); // genesis block
+    //Premine
+    if (chainActive.Tip()->nHeight < 2)
+        return Params().ProofOfWorkLimit().GetCompact();
     
     // always mine PoW blocks at the lowest diff on testnet
     if (TestNet() && chainActive.Tip()->nHeight < Params().LastProofOfWorkHeight())
