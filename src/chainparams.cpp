@@ -144,22 +144,22 @@ public:
         // CTransaction txGenesis = genesis.vtx[0];
         genesis.nTime = 1446002303;
         // genesis.vtx[0] = txGenesis;
-        genesis.nNonce = 2108003;
+        genesis.nNonce = 1632510;
         //GENESIS HASH
-        hashGenesisBlock = uint256("0x01");
-        if (genesis.GetHash() != hashGenesisBlock)
-        {
-            LogPrintf("recalculating params for mainnet.\n");
-            LogPrintf("old mainnet genesis nonce: %u\n", genesis.nNonce);
-            LogPrintf("old mainnet genesis hash:  %s\n", hashGenesisBlock.ToString().c_str());
-            // deliberately empty for loop finds nonce value.
-            for(genesis.nNonce = 0; CBigNum(genesis.GetHash()) > bnProofOfWorkLimit; genesis.nNonce++){ } 
-            LogPrintf("new mainnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
-            LogPrintf("new mainnet genesis nonce: %u\n", genesis.nNonce); 
-            LogPrintf("new mainnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
-        }
+//         hashGenesisBlock = uint256("0x01");
+//         if (genesis.GetHash() != hashGenesisBlock)
+//         {
+//             LogPrintf("recalculating params for mainnet.\n");
+//             LogPrintf("old mainnet genesis nonce: %u\n", genesis.nNonce);
+//             LogPrintf("old mainnet genesis hash:  %s\n", hashGenesisBlock.ToString().c_str());
+//             // deliberately empty for loop finds nonce value.
+//             for(genesis.nNonce = 0; CBigNum(genesis.GetHash()) > bnProofOfWorkLimit; genesis.nNonce++){ } 
+//             LogPrintf("new mainnet genesis merkle root: %s\n", genesis.hashMerkleRoot.ToString().c_str());
+//             LogPrintf("new mainnet genesis nonce: %u\n", genesis.nNonce); 
+//             LogPrintf("new mainnet genesis hash: %s\n", genesis.GetHash().ToString().c_str());
+//         }
         hashGenesisBlock = genesis.GetHash();
-        assert(hashGenesisBlock == uint256("0xa12ac9bd4cd26262c53a6277aafc61fe9dfe1e2b05eaa1ca148a5be8b394e35a"));
+        assert(hashGenesisBlock == uint256("0x00000e6b14f384cb234d90a6b1e81209fed84e7652b053e39770669c5a6569ad"));
 
         vFixedSeeds.clear();
         vSeeds.clear();
