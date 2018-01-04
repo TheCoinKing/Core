@@ -94,7 +94,7 @@ public:
 #endif
                 if (thash <= hashTarget)
                     break;
-                if ((block.nNonce & 0xFFF) == 0)
+                if ((genesis.nNonce & 0xFFF) == 0)
                 {
                     LogPrintf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, thash.ToString().c_str(), hashTarget.ToString().c_str());
                 }
