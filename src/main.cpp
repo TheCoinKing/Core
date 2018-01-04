@@ -1259,7 +1259,7 @@ int64_t GetBlockValue(int nHeight, int64_t nFees)
         nSubsidy = 0 * COIN;
     } else if (nHeight < 2) {
         // Premine: First 10 block are 545,000,000 TKC (5% of the total coin)
-        nSubsidy = 1.65 * COIN;
+        nSubsidy = 2.65 * COIN;
     }
 
     return nSubsidy + nFees;
