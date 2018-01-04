@@ -1435,7 +1435,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
 {
     //Genesis
     if (pindexLast == NULL)
-        return bnProofOfWorkLimit.GetCompact(); // genesis block
+        return CBigNum(~uint256(0) >> 20).GetCompact(); // genesis block
     
     // always mine PoW blocks at the lowest diff on testnet
     if (TestNet() && chainActive.Tip()->nHeight < Params().LastProofOfWorkHeight())
