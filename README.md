@@ -1,141 +1,43 @@
-coinking Core integration/staging tree
-=====================================
 
-http://www.coinking.com
+coinking Official Development Repo
+==================================
 
-Copyright (c) 2009-2016 Bitcoin Core Developers
-Copyright (c) 2014-2016 coinking Core Developers
+### What is coinking?
+[coinking](https://coinking.net) (abbreviated tkc), also known as tkcoin and Peer-to-Peer Coin is the first [cryptocurrency](https://en.wikipedia.org/wiki/Cryptocurrency) design introducing [proof-of-stake consensus](https://coinking.net/assets/paper/coinking-paper.pdf) as a security model, with a combined [proof-of-stake](https://coinking.net/assets/paper/coinking-paper.pdf)/[proof-of-work](https://en.wikipedia.org/wiki/Proof-of-work_system) minting system. coinking is based on [Bitcoin](https://bitcoin.org), while introducing many important innovations to cryptocurrency field including new security model, energy efficiency, better minting model and more adaptive response to rapid change in network computation power.
 
-What is coinking?
-----------------
+### coinking Resources
+* Client and Source:
+[Client Binaries](https://coinking.net/download),
+[Source Code](https://github.com/coinking/coinking)
+* Documentation: [coinking Whitepaper](https://coinking.net/whitepaper),
+[coinking Wiki](https://github.com/coinking/coinking/wiki)
+* Help: 
+[Forum](https://talk.coinking.net),
+[Intro & Important Links](https://talk.coinking.net/t/what-is-coinking-intro-important-links/2889)
 
-coinking is an experimental new digital currency that enables instant payments to
-anyone, anywhere in the world. coinking uses peer-to-peer technology to operate
-with no central authority: managing transactions and issuing money are carried
-out collectively by the network. coinking Core is the name of open source
-software which enables the use of this currency.
+Repo Guidelines
+================================
 
-coinking first started in January 2014 as a variant of Litecoin using Scrypt as
-the Proof-of-Work (PoW) hash algorithm.
- - 1 minute block target
- - 100,000 coins per block
- - subsidy halves every 500,000 blocks
- - subsidy halves every 50,000 blocks starting at block 140,000
- - difficulty retarget: every block using Kimoto's gravity well
+* Developers work in their own forks, then submit pull requests when they think their feature or bug fix is ready.
+* If it is a simple/trivial/non-controversial change, then one of the development team members simply pulls it.
+* If it is a more complicated or potentially controversial change, then the change may be discussed in the pull request, or the requester may be asked to start a discussion in the [coinking Forum](https://talk.coinking.net) for a broader community discussion. 
+* The patch will be accepted if there is broad consensus that it is a good thing. Developers should expect to rework and resubmit patches if they don't match the project's coding conventions (see coding.txt) or are controversial.
+* From time to time a pull request will become outdated. If this occurs, and the pull is no longer automatically mergeable; a comment on the pull will be used to issue a warning of closure.  Pull requests closed in this manner will have their corresponding issue labeled 'stagnant'.
+* For development ideas and help see [here](https://talk.coinking.net/c/protocol).
 
+## Branches:
 
-On 2nd August 2014 at block 260,800 coinking transitioned to its own original Proof-of-Stake-Velocity (PoSV)
-algorithm which replaced Proof-of-Work (PoW).
- - 1 minute block target
- - just under 27 billion mined in PoW phase
- - 5% annual interest in PoSV phase
- - difficulty retarget: every block using Kimoto's gravity well
- - white paper: http://www.coinking.com/papers/PoSV.pdf
- - FAQs paper: http://www.coinking.com/papers/PoSV_FAQ.pdf
+### develop (all pull requests should go here)
+The develop branch is used by developers to merge their newly implemented features to.
+Pull requests should always be made to this branch (except for critical fixes), and could possibly break the code.
+The develop branch is therefore unstable and not guaranteed to work on any system.
 
-On December 2015 work commenced on porting directly from Bitcoin v0.9 whilst maintaining the original functionality.
- - allowing for better maintainabilty
- - monitoring of upstream features
- - improved code consistency and sharing
+### master (only updated by group members)
+The master branch get's updates from tested states of the develop branch.
+Therefore, the master branch should contain functional but experimental code.
 
-For more information, as well as an immediately useable, binary version of
-the coinking Core software, see http://www.coinking.com
-
-License
--------
-
-coinking Core is released under the terms of the MIT license. See [COPYING](COPYING) for more
-information or see http://opensource.org/licenses/MIT.
-
-Development process
--------------------
-
-Developers work in their own trees, then submit pull requests when they think
-their feature or bug fix is ready.
-
-If it is a simple/trivial/non-controversial change, then one of the coinking
-development team members simply pulls it.
-
-If it is a *more complicated or potentially controversial* change, then the patch
-submitter will be asked to start a discussion (if they haven't already) on the relevant forum channel.
-
-The patch will be accepted if there is broad consensus that it is a good thing.
-Developers should expect to rework and resubmit patches if the code doesn't
-match the project's coding conventions (see [doc/coding.md](doc/coding.md)) or are
-controversial.
-
-The `master` branch is regularly built and tested, but is not guaranteed to be
-completely stable. [Tags](https://github.com/coinking-project/coinking/tags) are created
-regularly to indicate new official, stable release versions of Bitcoin.
-
-Testing
--------
-
-Testing and code review is the bottleneck for development; we get more pull
-requests than we can review and test. Please be patient and help out, and
-remember this is a security-critical project where any mistake might cost people
-lots of money.
-
-### Automated Testing
-
-Developers are strongly encouraged to write unit tests for new code, and to
-submit new unit tests for old code. Unit tests can be compiled and run (assuming they weren't disabled in configure) with: `make check`
-
-Every pull request is built for Windows, Linux and OSx on a dedicated server,
-and unit and sanity tests are automatically run. The binaries produced may be
-used for manual QA testing — a link to them will appear in a comment on the
-pull request posted by [BitcoinPullTester](https://github.com/BitcoinPullTester). See https://github.com/TheBlueMatt/test-scripts
-for the build/test scripts.
-
-### Manual Quality Assurance (QA) Testing
-
-Large changes should have a test plan, and should be tested by somebody other
-than the developer who wrote the code.
-See https://github.com/bitcoin/QA/ for how to create a test plan.
-
-Translations
-------------
-
-Changes to translations as well as new translations can be submitted to
-[Bitcoin Core's Transifex page](https://www.transifex.com/projects/p/bitcoin/).
-
-Periodically the translations are pulled from Transifex and merged into the git repository. See the
-[translation process](doc/translation_process.md) for details on how this works.
-
-**Important**: We do not accept translation changes as github pull request because the next
-pull from Transifex would automatically overwrite them again.
-
-Development tips and tricks
----------------------------
-
-**compiling for debugging**
-
-Run configure with the --enable-debug option, then make. Or run configure with
-CXXFLAGS="-g -ggdb -O0" or whatever debug flags you need.
-
-**debug.log**
-
-If the code is behaving strangely, take a look in the debug.log file in the data directory;
-error and debugging message are written there.
-
-The -debug=... command-line option controls debugging; running with just -debug will turn
-on all categories (and give you a very large debug.log file).
-
-The Qt code routes qDebug() output to debug.log under category "qt": run with -debug=qt
-to see it.
-
-**testnet and regtest modes**
-
-Run with the -testnet option to run with "play coinkings" on the test network, if you
-are testing multi-machine code that needs to operate across the internet.
-
-If you are testing something that can run on one machine, run with the -regtest option.
-In regression test mode blocks can be created on-demand; see qa/rpc-tests/ for tests
-that run in -regest mode.
-
-**DEBUG_LOCKORDER**
-
-coinking Core is a multithreaded application, and deadlocks or other multithreading bugs
-can be very difficult to track down. Compiling with -DDEBUG_LOCKORDER (configure
-CXXFLAGS="-DDEBUG_LOCKORDER -g") inserts run-time checks to keep track of what locks
-are held, and adds warning to the debug.log file if inconsistencies are detected.
+### release-* (the official releases)
+The release branch is identified by it's major and minor version number e.g. `release-0.6`.
+The official release tags are always made on a release branch.
+Release branches will typically branch from or merge tested code from the master branch to freeze the code for release.
+Only critical patches can be applied through pull requests directly on this branch, all non critical features should follow the standard path through develop -> master -> release-*

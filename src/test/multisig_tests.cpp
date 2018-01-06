@@ -1,23 +1,25 @@
-// Copyright (c) 2011-2013 The Bitcoin Core developers
-// Distributed under the MIT/X11 software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+#include <boost/assert.hpp>
+#include <boost/assign/list_of.hpp>
+#include <boost/assign/list_inserter.hpp>
+#include <boost/assign/std/vector.hpp>
+#include <boost/test/unit_test.hpp>
+#include <boost/foreach.hpp>
+#include <boost/tuple/tuple.hpp>
 
-#include "key.h"
+#include <openssl/ec.h>
+#include <openssl/err.h>
+
 #include "keystore.h"
 #include "main.h"
 #include "script.h"
-#include "uint256.h"
-
-#include <boost/assign/std/vector.hpp>
-#include <boost/foreach.hpp>
-#include <boost/test/unit_test.hpp>
+#include "wallet.h"
 
 using namespace std;
 using namespace boost::assign;
 
 typedef vector<unsigned char> valtype;
 
-extern uint256 SignatureHash(const CScript &scriptCode, const CTransaction& txTo, unsigned int nIn, int nHashType);
+extern uint256 SignatureHash(CScript scriptCode, const CTransaction& txTo, unsigned int nIn, int nHashType);
 
 BOOST_AUTO_TEST_SUITE(multisig_tests)
 
@@ -28,7 +30,7 @@ sign_multisig(CScript scriptPubKey, vector<CKey> keys, CTransaction transaction,
 
     CScript result;
     result << OP_0; // CHECKMULTISIG bug workaround
-    BOOST_FOREACH(const CKey &key, keys)
+    BOOST_FOREACH(CKey key, keys)
     {
         vector<unsigned char> vchSig;
         BOOST_CHECK(key.Sign(hash, vchSig));

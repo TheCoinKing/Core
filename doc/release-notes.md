@@ -1,89 +1,43 @@
-coinking Core version 2.0.1 is now available from:
+(note: this is a temporary file, to be added-to by anybody, and deleted at
+release time)
 
-  https://wallet.coinking.com/
+0.8.6 changes
+=============
 
-This is a new minor version release of coinking,
-Previously, the original and sunsequent versions of coinking were taken from a fork of Litecoin.
-With the release of coinking V2.0.0, is now based directly from a fork Bitcoin.
-This allows for better source control and feature implementaion from upstream changes
+- Default block size increase for miners
+  (see https://gist.github.com/gavinandresen/7670433#086-accept-into-block)
 
-Upgrading to this release is recommended.
+- Remove the all-outputs-must-be-greater-than-CENT-to-qualify-as-free rule for relaying
+  (see https://gist.github.com/gavinandresen/7670433#086-relaying)
 
-Please report bugs using the issue tracker at github:
+- Lower maximum size for free transaction creation
+  (see https://gist.github.com/gavinandresen/7670433#086-wallet)
 
-  https://github.com/coinking-project/coinking/issues
+- OSX block chain database corruption fixes
+  - Update leveldb to 1.13
+  - Use fcntl with `F_FULLSYNC` instead of fsync on OSX
+  - Use native Darwin memory barriers
+  - Replace use of mmap in leveldb for improved reliability (only on OSX)
 
-How to Upgrade
-===============
+- Fix nodes forwarding transactions with empty vins and getting banned
 
-If you are running an older version of coinking, shut it down. Wait until it has completely
-shut down (which might take a few minutes for older versions), then run the
-installer (on Windows) or just copy over /Applications/coinking-Qt (on Mac) or
-coinkingd/coinking-qt (on Linux).
+- Network code performance and robustness improvements
 
-Start wallet
+- Additional debug.log logging for diagnosis of network problems, log timestamps by default
 
-Notable changes
-================
+- Fix Bitcoin-Qt startup crash when clicking dock icon on OSX 
 
-Core base code
-------------------------------------
+- Fix memory leaks in CKey::SetCompactSignature() and Key::SignCompact()
 
-coinking v2.0.0.0 was forked from Bitcoin v0.9.5
+- Fix rare GUI crash on send
 
-Staking and relay policy enhancements
-------------------------------------
+- Various small GUI, documentation and build fixes
 
-To implement BIP66, coinking Core's block templates are now for version 4 blocks only.
-When BIP66 concensus (Supermajority 6120/7200) is reached, only v4 blocks will be accepted by the network.
-and any staking
-
-OP_Return and data in the blockchain
-------------------------------------
-coinking allows storing 80bytes of arbitary data in the blockchain
-
-2.0.1 changelog
-===============
-fafc567 - John Nash, 2017-12-23 : Add additional dnsseed nodes
-47abb78 - Henry Young, 2017-01-08 : Corrected two string literal Bitcoin references to Redecoin
-f88a2e5 - Stoner19, 2017-01-05 : Update bitcoind.cpp
-dbbfd6f - John Nash, 2016-11-30 : build: don't let libtool insert rpath into binaries
-2ab6541 - John Nash, 2016-11-27 : build: fix newer boost build with c++11
-81b7112 - John Nash, 2016-11-26 : add support for miniupnpc api version 14
-e69213e - John Nash, 2016-11-25 : Clearer meaning to error messages High Fee warning and Not enough inputs
-20bda36 - Erkan Yilmaz, 2016-08-18 : typo
-87fa337 - John Nash, 2016-08-18 : #89 Improve layout of splash screen Update text layout and adjust background for readability
-02572a6 - John Nash, 2016-08-16 : #87 Update Debian installation instructions Add details how to install URI support on Debian Add updated graphic icons
-cc5cf5b - Sjolus, 2016-08-15 : Update rpcrawtransaction.cpp
-
-
-Credits
+Warning
 --------
 
-Thanks to everyone who contributed to coding, testing and feedback for this release, notably:
-
-- @Deadpool
-- @bmp02050
-- @lionzeye
-- @stoner19
-- @henryyoung
-- Erkan Yilmaz
-- @Sjolus
-
-
-As well as everyone that helped translating on [Transifex](https://www.transifex.com/coinking/coinking/).
-- @Serkan34
-- @Syar
-- @ricklopez
-- @hyoung
-- @elcryptotrader
-- @Maxamus
-- @Erkan_Yilmaz
-- @tecopos
-- @xDeadp00lx
-- @clickerz
-- @Kasvain
-- @collab
-- @lionzeye
-- @Ragnarice
+- There have been frequent reports of users running out of virtual memory on 32-bit systems
+  during the initial sync.
+  Hence it is recommended to use a 64-bit executable if possible.
+  A 64-bit executable for Windows is planned for 0.9.
 

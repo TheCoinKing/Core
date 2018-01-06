@@ -1,76 +1,100 @@
-coinking 2.0.1 BETA
-=====================
+coinking 0.6.0 BETA
 
-Copyright (c) 2009-2016 Bitcoin Developers
-Copyright (c) 2014-2017 coinking Developers
+Copyright (c) 2011-2017 coinking Developers
+Distributed under the MIT/X11 software license, see the accompanying
+file license.txt or http://www.opensource.org/licenses/mit-license.php.
+This product includes software developed by the OpenSSL Project for use in
+the OpenSSL Toolkit (http://www.openssl.org/).  This product includes
+cryptographic software written by Eric Young (eay@cryptsoft.com).
+
+
+Intro
+-----
+coinking is a free open source project derived from Bitcoin, with
+the goal of providing a long-term energy-efficient crypto-currency.
+Built on the foundation of Bitcoin, innovations such as proof-of-stake
+help further advance the field of crypto-currency.
+
+
+Setup
+-----
+Unpack the files into a directory and run:
+ bin/32/coinking-qt (GUI, 32-bit)
+ bin/32/coinkingd (headless, 32-bit)
+ bin/64/coinking-qt (GUI, 64-bit)
+ bin/64/coinkingd (headless, 64-bit)
+
+The software automatically finds other nodes to connect to.  You can
+enable Universal Plug and Play (UPnP) with your router/firewall
+or forward port 9901 (TCP) to your computer so you can receive
+incoming connections.  coinking works without incoming connections,
+but allowing incoming connections helps the coinking network.
+
+
+Upgrade
+-------
+All your existing coins/transactions should be intact with the upgrade.
+To upgrade from 0.5, first backup wallet
+coinkingd backupwallet <destination_backup_file>
+Then shutdown coinkingd by
+coinkingd stop
+Uninstall v0.5 client, download and install v0.6 client.
+Remove all files and subdirectory in your wallet directory EXCEPT FOR
+wallet.dat (wallet file) and coinking.conf (configuration file).
+Start up the new coinkingd (0.6).
+For this upgrade blockchain re-download is required.
+
+
+See the documentation/wiki at github:
+  http://github.com/coinking/coinking
+for help and more information.
+
+
+Other Pages
+---------------------
+- [Unix Build Notes](build-unix.md)
+- [OSX Build Notes](build-osx.md)
+- [Windows Build Notes](build-msw.md)
+- [Coding Guidelines](coding.md)
+- [Release Process](release-process.md)
+- [Release Notes](release-notes.md)
+- [Multiwallet Qt Development](multiwallet-qt.md)
+- [Unit Tests](unit-tests.md)
+- [Translation Process](translation_process.md)
+
+
+
+
+Bitcoin 0.8.6 BETA
+====================
+
+Copyright (c) 2009-2013 Bitcoin Developers
+
+Distributed under the MIT/X11 software license, see the accompanying
+file COPYING or http://www.opensource.org/licenses/mit-license.php.
+This product includes software developed by the OpenSSL Project for use in the [OpenSSL Toolkit](http://www.openssl.org/). This product includes
+cryptographic software written by Eric Young ([eay@cryptsoft.com](mailto:eay@cryptsoft.com)), and UPnP software written by Thomas Bernard.
+
+
+Intro
+---------------------
+Bitcoin is a free open source peer-to-peer electronic cash system that is
+completely decentralized, without the need for a central server or trusted
+parties.  Users hold the crypto keys to their own money and transact directly
+with each other, with the help of a P2P network to check for double-spending.
 
 
 Setup
 ---------------------
-[coinking Core](http://coinking.com) is the original coinking client and it builds the backbone of the network. However, it downloads and stores the entire history of coinking transactions (which is currently several GBs); depending on the speed of your computer and network connection, the synchronization process can take anywhere from a few hours to a day or more. Thankfully you only have to do this once. If you would like the process to go faster you can [download the blockchain directly](bootstrap.md).
-
-Running
----------------------
-The following are some helpful notes on how to run coinking on your native platform. 
-
-### Unix
-
-You need the Qt4 run-time libraries to run coinking-Qt. On Debian or Ubuntu:
-
-	sudo apt-get install libqtgui4
+You need the Qt4 run-time libraries to run Bitcoin-Qt. On Debian or Ubuntu:
+	`sudo apt-get install libqtgui4`
 
 Unpack the files into a directory and run:
 
-- bin/32/coinking-qt (GUI, 32-bit) or bin/32/coinkingd (headless, 32-bit)
-- bin/64/coinking-qt (GUI, 64-bit) or bin/64/coinkingd (headless, 64-bit)
+- bin/32/bitcoin-qt (GUI, 32-bit)
+- bin/32/bitcoind (headless, 32-bit)
+- bin/64/bitcoin-qt (GUI, 64-bit)
+- bin/64/bitcoind (headless, 64-bit)
 
-
-
-### Windows
-
-Unpack the files into a directory, and then run coinking-qt.exe.
-
-### OSX
-
-Drag coinking-Qt to your applications folder, and then run coinking-Qt.
-
-### Need Help?
-
-* See the documentation at the [coinking Wiki](https://wiki.coinking.com/)
+See the documentation at the [Bitcoin Wiki](https://en.bitcoin.it/wiki/Main_Page)
 for help and more information.
-* Ask for help on [#coinking](http://webchat.freenode.net?channels=coinking) on Freenode. If you don't have an IRC client use [webchat here](http://webchat.freenode.net?channels=coinking).
-* Ask for help on the [ReddcoinTalk](https://coinkingtalk.org/) forums, in the [Technical Support board](https://www.coinkingtalk.org/category/9/troubleshooting).
-
-Building
----------------------
-The following are developer notes on how to build coinking on your native platform. They are not complete guides, but include notes on the necessary libraries, compile flags, etc.
-
-- [OSX Build Notes](build-osx.md)
-- [Unix Build Notes](build-unix.md)
-- [Windows Build Notes](build-msw.md)
-
-Development
----------------------
-The coinking repo's [root README](https://github.com/coinking-project/coinking/blob/master/README.md) contains relevant information on the development process and automated testing.
-
-- [Coding Guidelines](coding.md)
-- [Multiwallet Qt Development](multiwallet-qt.md)
-- [Release Notes](release-notes.md)
-- [Release Process](release-process.md)
-- [Source Code Documentation (External Link)](https://dev.visucore.com/bitcoin/doxygen/)
-- [Translation Process](translation_process.md)
-- [Unit Tests](unit-tests.md)
-
-### Resources
-* Discuss on the [ReddcoinTalk](https://coinkingtalk.org/) forums, in the [Development & Technical Discussion board](https://www.coinkingtalk.org/category/4/development-discussions).
-
-### Miscellaneous
-- [Assets Attribution](assets-attribution.md)
-- [Files](files.md)
-- [Tor Support](tor.md)
-
-License
----------------------
-Distributed under the [MIT/X11 software license](http://www.opensource.org/licenses/mit-license.php).
-This product includes software developed by the OpenSSL Project for use in the [OpenSSL Toolkit](http://www.openssl.org/). This product includes
-cryptographic software written by Eric Young ([eay@cryptsoft.com](mailto:eay@cryptsoft.com)), and UPnP software written by Thomas Bernard.

@@ -11,40 +11,25 @@ packages:
 - "unzip"
 - "nsis"
 - "faketime"
-- "autoconf2.13"
-- "libtool"
-- "automake"
-- "pkg-config"
-- "bsdmainutils"
 
-reference_datetime: "2016-05-28 00:00:00"
+reference_datetime: "2013-06-01 00:00:00"
 remotes:
-- "url": "https://github.com/coinking-project/coinking.git"
+- "url": "https://github.com/coinking/coinking.git"
   "dir": "coinking"
 files:
-- "qt-win32-5.2.0-gitian-r3.zip"
-- "qt-win64-5.2.0-gitian-r3.zip"
-- "boost-win32-1.55.0-gitian-r6.zip"
-- "boost-win64-1.55.0-gitian-r6.zip"
-- "coinking-deps-win32-gitian-r16.zip"
-- "coinking-deps-win64-gitian-r16.zip"
-- "protobuf-win32-2.5.0-gitian-r4.zip"
-- "protobuf-win64-2.5.0-gitian-r4.zip"
+- "qt-win32-4.8.5-gitian-r1.zip"
+- "qt-win64-4.8.5-gitian-r1.zip"
+- "boost-win32-1.55.0-gitian-r1.zip"
+- "boost-win64-1.55.0-gitian-r1.zip"
+- "coinking-deps-win32-gitian-r1.zip"
+- "coinking-deps-win64-gitian-r1.zip"
 script: |
   # Defines
   export TZ=UTC
   INDIR=$HOME/build
-  OPTFLAGS='-O2 -msse2'
+  OPTFLAGS='-O2'
   TEMPDIR="$HOME/tempdir"
   NEEDDIST=1
-  # Qt: workaround for determinism in resource ordering
-  #  Qt5's rcc uses a QHash to store the files for the resource.
-  #  A security fix in QHash makes the ordering of keys to be different on every run
-  #  (https://qt.gitorious.org/qt/qtbase/commit/c01eaa438200edc9a3bbcd8ae1e8ded058bea268).
-  #  This is good in general but qrc shouldn't be doing a traversal over a randomized container.
-  #  The thorough solution would be to use QMap instead of QHash, but this requires patching Qt.
-  #  For now luckily there is a test mode that forces a fixed seed.
-  export QT_RCC_TEST=1
   for BITS in 32 64; do # for architectures
     #
     STAGING=$HOME/staging${BITS}
@@ -59,31 +44,46 @@ script: |
     mkdir -p $STAGING $BUILDDIR $BINDIR
     #
     cd $STAGING
-    unzip $INDIR/qt-win${BITS}-5.2.0-gitian-r3.zip
-    unzip $INDIR/boost-win${BITS}-1.55.0-gitian-r6.zip
-    unzip $INDIR/coinking-deps-win${BITS}-gitian-r16.zip
-    unzip $INDIR/protobuf-win${BITS}-2.5.0-gitian-r4.zip
+    unzip $INDIR/qt-win${BITS}-4.8.5-gitian-r1.zip
+    unzip $INDIR/boost-win${BITS}-1.55.0-gitian-r1.zip
+    unzip $INDIR/coinking-deps-win${BITS}-gitian-r1.zip
     if [ "$NEEDDIST" == "1" ]; then
       # Make source code archive which is architecture independent so it only needs to be done once
       cd $HOME/build/coinking
-      ./autogen.sh
-      ./configure --bindir=$OUTDIR --prefix=$STAGING --host=$HOST --with-qt-plugindir=$STAGING/plugins  --with-qt-incdir=$STAGING/include --with-qt-bindir=$STAGING/host/bin --with-boost=$STAGING --disable-maintainer-mode --with-protoc-bindir=$STAGING/host/bin --disable-dependency-tracking CPPFLAGS="-I$STAGING/include ${OPTFLAGS}" LDFLAGS="-L$STAGING/lib ${OPTFLAGS}" CXXFLAGS="-frandom-seed=coinking ${OPTFLAGS}"
-      make dist
-      DISTNAME=`echo coinking-*.tar.gz`
+      git archive --format=tar -o coinking.tar HEAD
+      cp doc/README_windows.txt $OUTDIR/readme.txt
+      cp COPYING $OUTDIR/license.txt
+      DISTNAME=coinking.tar
       NEEDDIST=0
     fi
+
     # Build platform-dependent executables from source archive
     cd $BUILDDIR
-    mkdir -p distsrc
+    cp -r $HOME/build/coinking distsrc
     cd distsrc
-    tar --strip-components=1 -xf $HOME/build/coinking/$DISTNAME
-    ./configure --bindir=$BINDIR --prefix=$STAGING --host=$HOST --with-qt-plugindir=$STAGING/plugins  --with-qt-incdir=$STAGING/include --with-qt-bindir=$STAGING/host/bin --with-boost=$STAGING --disable-maintainer-mode --with-protoc-bindir=$STAGING/host/bin --disable-dependency-tracking CPPFLAGS="-I$STAGING/include ${OPTFLAGS}" LDFLAGS="-L$STAGING/lib ${OPTFLAGS}" CXXFLAGS="-frandom-seed=coinking ${OPTFLAGS}"
+
     export LD_PRELOAD=/usr/lib/faketime/libfaketime.so.1
     export FAKETIME=$REFERENCE_DATETIME
+
+    $STAGING/host/bin/qmake -spec win32-g++ CROSS_COMPILE=$HOST USE_QRCODE=1 INCLUDEPATH=$STAGING BOOST_LIB_SUFFIX=-mt-s BOOST_THREAD_LIB_SUFFIX=_win32-mt-s DEFINES=BOOST_THREAD_USE_LIB BITCOIN_NEED_QT_PLUGINS=1 QMAKE_LRELEASE=lrelease QMAKE_CXXFLAGS=-frandom-seed=nu QMAKE_LFLAGS="-static-libgcc -static-libstdc++ -frandom-seed=nu" USE_BUILD_INFO=1 CURL_STATIC=1 MINIUPNP_STATICLIB=1
     make $MAKEOPTS
-    make deploy
-    make install-strip
-    cp -f coinking-*setup*.exe $BINDIR/
+    ${HOST}-strip release/coinking-qt.exe
+    cp -f release/coinking-qt.exe $BINDIR/
+
+    cd src
+    make -f makefile.linux-mingw $MAKEOPTS HOST=$HOST DEPSDIR=$STAGING coinkingd.exe USE_UPNP=0 DEBUGFLAGS="-frandom-seed=nu"
+    ${HOST}-strip coinkingd.exe
+    cp -f coinkingd.exe $BINDIR/
+
+    cd $BUILDDIR
+    mkdir nsis
+    cd nsis
+    tar -xf $HOME/build/coinking/$DISTNAME
+    mkdir release
+    cp $BINDIR/coinking-qt.exe release/
+    cp $BINDIR/coinkingd.exe release/
+    makensis share/setup.nsi
+    cp share/coinking-*setup*.exe $BINDIR
     unset LD_PRELOAD
     unset FAKETIME
   done # for BITS in
@@ -93,5 +93,4 @@ script: |
   rm -rf $TEMPDIR
   mkdir -p $TEMPDIR
   cd $TEMPDIR
-  tar -xvf $HOME/build/coinking/$DISTNAME | sort | tar --no-recursion -cT /dev/stdin --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 --mtime="$REFERENCE_DATETIME" | gzip -n > $OUTDIR/src/$DISTNAME
-
+  tar -xvf $HOME/build/coinking/$DISTNAME | sort | tar --no-recursion -cT /dev/stdin --mode='u+rw,go+r-w,a+X' --owner=0 --group=0 --mtime="$REFERENCE_DATETIME" | gzip -n > $OUTDIR/src/$DISTNAME.gz

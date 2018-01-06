@@ -36,8 +36,8 @@
 #define ARCH_CPU_X86_FAMILY 1
 #elif defined(__ARMEL__)
 #define ARCH_CPU_ARM_FAMILY 1
-#elif defined(__ppc__) || defined(__powerpc__) || defined(__powerpc64__)
-#define ARCH_CPU_PPC_FAMILY 1
+#elif defined(__tkc__) || defined(__powerpc__) || defined(__powerpc64__)
+#define ARCH_CPU_tkc_FAMILY 1
 #endif
 
 namespace leveldb {
@@ -69,7 +69,7 @@ inline void MemoryBarrier() {
 // Sun Studio
 #elif defined(ARCH_CPU_X86_FAMILY) && defined(__SUNPRO_CC)
 inline void MemoryBarrier() {
-  // See http://gcc.gnu.org/ml/gcc/2003-04/msg01180.html for a discussion on
+     	// See http://gcc.gnu.org/ml/gcc/2003-04/msg01180.html for a discussion on
   // this idiom. Also see http://en.wikipedia.org/wiki/Memory_ordering.
   asm volatile("" : : : "memory");
 }
@@ -93,8 +93,8 @@ inline void MemoryBarrier() {
 }
 #define LEVELDB_HAVE_MEMORY_BARRIER
 
-// PPC
-#elif defined(ARCH_CPU_PPC_FAMILY) && defined(__GNUC__)
+// tkc
+#elif defined(ARCH_CPU_tkc_FAMILY) && defined(__GNUC__)
 inline void MemoryBarrier() {
   // TODO for some powerpc expert: is there a cheaper suitable variant?
   // Perhaps by having separate barriers for acquire and release ops.
@@ -216,7 +216,7 @@ class AtomicPointer {
 #undef LEVELDB_HAVE_MEMORY_BARRIER
 #undef ARCH_CPU_X86_FAMILY
 #undef ARCH_CPU_ARM_FAMILY
-#undef ARCH_CPU_PPC_FAMILY
+#undef ARCH_CPU_tkc_FAMILY
 
 }  // namespace port
 }  // namespace leveldb

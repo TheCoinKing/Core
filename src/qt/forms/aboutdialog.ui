@@ -6,14 +6,27 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>639</width>
+    <width>593</width>
     <height>319</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>About coinking Core</string>
+   <string>About coinking</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
+   <item>
+    <widget class="QLabel" name="label_4">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Ignored">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="pixmap">
+      <pixmap resource="../bitcoin.qrc">:/images/about</pixmap>
+     </property>
+    </widget>
+   </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <item>
@@ -37,7 +50,7 @@
           <cursorShape>IBeamCursor</cursorShape>
          </property>
          <property name="text">
-          <string>&lt;b&gt;coinking Core&lt;/b&gt; version</string>
+          <string>&lt;b&gt;coinking&lt;/b&gt; version</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -73,14 +86,28 @@
       </layout>
      </item>
      <item>
-      <widget class="QLabel" name="copyrightLabel">
+      <widget class="QLabel" name="coinkingCopyrightLabel">
        <property name="cursor">
         <cursorShape>IBeamCursor</cursorShape>
        </property>
        <property name="text">
-        <string notr="true">Copyright &amp;copy; 2009-YYYY The Bitcoin Core developers
-Copyright &amp;copy; 2014-YYYY The coinking Core developers
-        </string>
+        <string>Copyright &amp;copy; 2011-YYYY coinking Developers</string>
+       </property>
+       <property name="textFormat">
+        <enum>Qt::RichText</enum>
+       </property>
+       <property name="textInteractionFlags">
+        <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="BitcoinCopyrightLabel">
+       <property name="cursor">
+        <cursorShape>IBeamCursor</cursorShape>
+       </property>
+       <property name="text">
+        <string notr="true">Copyright &amp;copy; 2009-2013 Bitcoin Developers</string>
        </property>
        <property name="textFormat">
         <enum>Qt::RichText</enum>
@@ -138,7 +165,9 @@ This product includes software developed by the OpenSSL Project for use in the O
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../bitcoin.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>
@@ -147,12 +176,12 @@ This product includes software developed by the OpenSSL Project for use in the O
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>360</x>
+     <y>308</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>157</x>
+     <y>274</y>
     </hint>
    </hints>
   </connection>
@@ -163,12 +192,12 @@ This product includes software developed by the OpenSSL Project for use in the O
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>20</x>
-     <y>20</y>
+     <x>428</x>
+     <y>308</y>
     </hint>
     <hint type="destinationlabel">
-     <x>20</x>
-     <y>20</y>
+     <x>286</x>
+     <y>274</y>
     </hint>
    </hints>
   </connection>

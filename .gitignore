@@ -1,61 +1,33 @@
-*.tar.gz
-
-*.exe
+src/*.exe
+src/tkcoin
 src/coinking
+src/tkcoind
 src/coinkingd
-src/coinking-cli
-src/test/test_coinking
-src/qt/test/test_coinking-qt
-
-Makefile.in
-aclocal.m4
-autom4te.cache/
-config.log
-config.status
-configure
-src/bitcoin-config.h
-src/bitcoin-config.h.in
-src/build-aux/
-src/stamp-h1
-share/setup.nsi
-share/qt/Info.plist
-
-src/qt/*.moc
-src/qt/moc_*.cpp
-src/qt/forms/ui_*.h
-
-src/qt/test/moc*.cpp
-
-.deps
-.dirstamp
+src/test_tkcoin
+src/test_coinking
 .*.swp
 *.*~*
 *.bak
 *.rej
 *.orig
 *.o
-*.o-*
 *.patch
-.bitcoin
-*.a
-*.pb.cc
-*.pb.h
-
-*.log
-*.trs
-*.dmg
-
-*.json.h
-*.raw.h
+.tkcoin
+.coinking
 
 # Compilation and Qt preprocessor part
 *.qm
 Makefile
+tkcoin-qt
 coinking-qt
+tkcoin-Qt.app
 coinking-Qt.app
+.qmake.stash
+coinking-qt_plugin_import.cpp
 
 # Unit-tests
 Makefile.test
+tkcoin-qt_test
 coinking-qt_test
 
 # Resources cpp
@@ -68,18 +40,10 @@ qrc_*.cpp
 .DS_Store
 build
 
-#lcov
-*.gcno
-/*.info
-test_bitcoin.coverage/
-total.coverage/
-coverage_percent.txt
+# mingw / Windows
+release/
+*.Debug
+*.Release
 
-#build tests
-linux-coverage-build
-linux-build
-win32-build
-qa/pull-tester/run-bitcoind-for-test.sh
-qa/pull-tester/build-tests.sh
-
-!src/leveldb*/Makefile
+!src/leveldb-*/Makefile
+coinking-qt

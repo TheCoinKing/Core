@@ -1,14 +1,19 @@
-// Copyright (c) 2009-2013 The Bitcoin developers
+// Copyright (c) 2009-2012 The Bitcoin developers
+// Copyright (c) 2011-2017 The coinking developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
 #ifndef BITCOIN_CHECKPOINT_H
 #define BITCOIN_CHECKPOINT_H
 
 #include <map>
+#include "net.h"
+#include "util.h"
 
-class CBlockIndex;
+#define CHECKPOINT_MAX_SPAN (60 * 60 * 4) // max 4 hours before latest block
+
 class uint256;
+class CBlockIndex;
+class CSyncCheckpoint;
 
 /** Block-chain checkpoints are compiled-in sanity checks.
  * They are updated every release or three.
@@ -16,7 +21,7 @@ class uint256;
 namespace Checkpoints
 {
     // Returns true if block passes checkpoint checks
-    bool CheckBlock(int nHeight, const uint256& hash);
+    bool CheckHardened(int nHeight, const uint256& hash);
 
     // Return conservative estimate of total number of blocks, 0 if unknown
     int GetTotalBlocksEstimate();
@@ -24,9 +29,10 @@ namespace Checkpoints
     // Returns last CBlockIndex* in mapBlockIndex that is a checkpoint
     CBlockIndex* GetLastCheckpoint(const std::map<uint256, CBlockIndex*>& mapBlockIndex);
 
-    double GuessVerificationProgress(CBlockIndex *pindex, bool fSigchecks = true);
+    // Returns the block hash of latest hardened checkpoint
+    uint256 GetLatestHardenedCheckpoint();
 
-    extern bool fEnabled;
+    double GuessVerificationProgress(CBlockIndex *pindex);
 }
 
 #endif

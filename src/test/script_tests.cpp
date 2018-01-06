@@ -1,38 +1,25 @@
-// Copyright (c) 2011-2013 The Bitcoin Core developers
-// Distributed under the MIT/X11 software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
-#include "script.h"
-
-#include "data/script_invalid.json.h"
-#include "data/script_valid.json.h"
-
-#include "key.h"
-#include "keystore.h"
-#include "main.h"
-
+#include <iostream>
 #include <fstream>
-#include <stdint.h>
-#include <string>
 #include <vector>
-
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string/split.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 #include <boost/foreach.hpp>
+#include <boost/preprocessor/stringize.hpp>
 #include <boost/test/unit_test.hpp>
 #include "json/json_spirit_reader_template.h"
-#include "json/json_spirit_utils.h"
 #include "json/json_spirit_writer_template.h"
+#include "json/json_spirit_utils.h"
+
+#include "main.h"
+#include "wallet.h"
 
 using namespace std;
 using namespace json_spirit;
 using namespace boost::algorithm;
 
-extern uint256 SignatureHash(const CScript &scriptCode, const CTransaction& txTo, unsigned int nIn, int nHashType);
+extern uint256 SignatureHash(CScript scriptCode, const CTransaction& txTo, unsigned int nIn, int nHashType);
 
 static const unsigned int flags = SCRIPT_VERIFY_P2SH | SCRIPT_VERIFY_STRICTENC;
 
@@ -45,12 +32,8 @@ ParseScript(string s)
 
     if (mapOpNames.size() == 0)
     {
-        for (int op = 0; op <= OP_NOP10; op++)
+        for (int op = OP_NOP; op <= OP_NOP10; op++)
         {
-            // Allow OP_RESERVED to get into mapOpNames
-            if (op < OP_NOP && op != OP_RESERVED)
-                continue;
-
             const char* name = GetOpName((opcodetype)op);
             if (strcmp(name, "OP_UNKNOWN") == 0)
                 continue;
@@ -71,7 +54,7 @@ ParseScript(string s)
             (starts_with(w, "-") && all(string(w.begin()+1, w.end()), is_digit())))
         {
             // Number
-            int64_t n = atoi64(w);
+            int64 n = atoi64(w);
             result << n;
         }
         else if (starts_with(w, "0x") && IsHex(string(w.begin()+2, w.end())))
@@ -89,7 +72,7 @@ ParseScript(string s)
         }
         else if (mapOpNames.count(w))
         {
-            // opcode, e.g. OP_ADD or ADD:
+            // opcode, e.g. OP_ADD or OP_1:
             result << mapOpNames[w];
         }
         else
@@ -103,15 +86,34 @@ ParseScript(string s)
 }
 
 Array
-read_json(const std::string& jsondata)
+read_json(const std::string& filename)
 {
-    Value v;
+    namespace fs = boost::filesystem;
+    fs::path testFile = fs::current_path() / "test" / "data" / filename;
 
-    if (!read_string(jsondata, v) || v.type() != array_type)
+#ifdef TEST_DATA_DIR
+    if (!fs::exists(testFile))
     {
-        BOOST_ERROR("Parse error.");
+        testFile = fs::path(BOOST_PP_STRINGIZE(TEST_DATA_DIR)) / filename;
+    }
+#endif
+
+    ifstream ifs(testFile.string().c_str(), ifstream::in);
+    Value v;
+    if (!read_stream(ifs, v))
+    {
+        if (ifs.fail())
+            BOOST_ERROR("Cound not find/open " << filename);
+        else
+            BOOST_ERROR("JSON syntax error in " << filename);
         return Array();
     }
+    if (v.type() != array_type)
+    {
+        BOOST_ERROR(filename << " does not contain a json array");
+        return Array();
+    }
+
     return v.get_array();
 }
 
@@ -124,7 +126,7 @@ BOOST_AUTO_TEST_CASE(script_valid)
     // Inner arrays are [ "scriptSig", "scriptPubKey" ]
     // ... where scriptSig and scriptPubKey are stringified
     // scripts.
-    Array tests = read_json(std::string(json_tests::script_valid, json_tests::script_valid + sizeof(json_tests::script_valid)));
+    Array tests = read_json("script_valid.json");
 
     BOOST_FOREACH(Value& tv, tests)
     {
@@ -140,20 +142,15 @@ BOOST_AUTO_TEST_CASE(script_valid)
         string scriptPubKeyString = test[1].get_str();
         CScript scriptPubKey = ParseScript(scriptPubKeyString);
 
-        int flagsNow = flags;
-        if (test.size() > 3 && ("," + test[2].get_str() + ",").find(",DERSIG,") != string::npos) {
-            flagsNow |= SCRIPT_VERIFY_DERSIG;
-        }
-
         CTransaction tx;
-        BOOST_CHECK_MESSAGE(VerifyScript(scriptSig, scriptPubKey, tx, 0, flagsNow, SIGHASH_NONE), strTest);
+        BOOST_CHECK_MESSAGE(VerifyScript(scriptSig, scriptPubKey, tx, 0, flags, SIGHASH_NONE), strTest);
     }
 }
 
 BOOST_AUTO_TEST_CASE(script_invalid)
 {
     // Scripts that should evaluate as invalid
-    Array tests = read_json(std::string(json_tests::script_invalid, json_tests::script_invalid + sizeof(json_tests::script_invalid)));
+    Array tests = read_json("script_invalid.json");
 
     BOOST_FOREACH(Value& tv, tests)
     {
@@ -169,13 +166,8 @@ BOOST_AUTO_TEST_CASE(script_invalid)
         string scriptPubKeyString = test[1].get_str();
         CScript scriptPubKey = ParseScript(scriptPubKeyString);
 
-        int flagsNow = flags;
-        if (test.size() > 3 && ("," + test[2].get_str() + ",").find(",DERSIG,") != string::npos) {
-            flagsNow |= SCRIPT_VERIFY_DERSIG;
-        }
-
         CTransaction tx;
-        BOOST_CHECK_MESSAGE(!VerifyScript(scriptSig, scriptPubKey, tx, 0, flagsNow, SIGHASH_NONE), strTest);
+        BOOST_CHECK_MESSAGE(!VerifyScript(scriptSig, scriptPubKey, tx, 0, flags, SIGHASH_NONE), strTest);
     }
 }
 
@@ -219,7 +211,7 @@ sign_multisig(CScript scriptPubKey, std::vector<CKey> keys, CTransaction transac
     // and vice-versa)
     //
     result << OP_0;
-    BOOST_FOREACH(const CKey &key, keys)
+    BOOST_FOREACH(CKey key, keys)
     {
         vector<unsigned char> vchSig;
         BOOST_CHECK(key.Sign(hash, vchSig));
@@ -229,7 +221,7 @@ sign_multisig(CScript scriptPubKey, std::vector<CKey> keys, CTransaction transac
     return result;
 }
 CScript
-sign_multisig(CScript scriptPubKey, const CKey &key, CTransaction transaction)
+sign_multisig(CScript scriptPubKey, CKey key, CTransaction transaction)
 {
     std::vector<CKey> keys;
     keys.push_back(key);
@@ -341,13 +333,11 @@ BOOST_AUTO_TEST_CASE(script_combineSigs)
     // Test the CombineSignatures function
     CBasicKeyStore keystore;
     vector<CKey> keys;
-    vector<CPubKey> pubkeys;
     for (int i = 0; i < 3; i++)
     {
         CKey key;
         key.MakeNewKey(i%2 == 1);
         keys.push_back(key);
-        pubkeys.push_back(key.GetPubKey());
         keystore.AddKey(key);
     }
 
@@ -400,7 +390,7 @@ BOOST_AUTO_TEST_CASE(script_combineSigs)
     BOOST_CHECK(combined == scriptSig);
 
     // Hardest case:  Multisig 2-of-3
-    scriptPubKey.SetMultisig(2, pubkeys);
+    scriptPubKey.SetMultisig(2, keys);
     keystore.AddCScript(scriptPubKey);
     SignSignature(keystore, txFrom, txTo, 0);
     combined = CombineSignatures(scriptPubKey, txTo, 0, scriptSig, empty);
@@ -452,22 +442,49 @@ BOOST_AUTO_TEST_CASE(script_combineSigs)
     BOOST_CHECK(combined == partial3c);
 }
 
-BOOST_AUTO_TEST_CASE(script_standard_push)
+BOOST_AUTO_TEST_CASE(script_CHECKLOCKTIMEVERIFY)
 {
-    for (int i=0; i<1000; i++) {
-        CScript script;
-        script << i;
-        BOOST_CHECK_MESSAGE(script.IsPushOnly(), "Number " << i << " is not pure push.");
-        BOOST_CHECK_MESSAGE(script.HasCanonicalPushes(), "Number " << i << " push is not canonical.");
-    }
+    //
+    // Simple locktime script
+    //
 
-    for (int i=0; i<1000; i++) {
-        std::vector<unsigned char> data(i, '\111');
-        CScript script;
-        script << data;
-        BOOST_CHECK_MESSAGE(script.IsPushOnly(), "Length " << i << " is not pure push.");
-        BOOST_CHECK_MESSAGE(script.HasCanonicalPushes(), "Length " << i << " push is not canonical.");
-    }
+    CScript scriptSimpleLock = CScript() << OP_16 << OP_CHECKLOCKTIMEVERIFY;
+
+    CTransaction tx;
+    tx.vin.push_back(CTxIn());
+    // Fails since tx.nLockTime < 16
+    BOOST_CHECK(!VerifyScript(CScript(), scriptSimpleLock, tx, 0, SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY, 0));
+
+    tx.nLockTime = 16;
+    // Fails since tx.vin[0].nSequence = CTxIn::SEQUENCE_FINAL by default, which disables nLockTime.
+    BOOST_CHECK(!VerifyScript(CScript(), scriptSimpleLock, tx, 0, SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY, 0));
+
+    tx.vin[0].nSequence = CTxIn::SEQUENCE_FINAL-1;
+    BOOST_CHECK(VerifyScript(CScript(), scriptSimpleLock, tx, 0, SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY, 0));
+
+    // Verify larger locktime succeeds
+    tx.nLockTime = 17;
+    BOOST_CHECK(VerifyScript(CScript(), scriptSimpleLock, tx, 0, SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY, 0));
+
+    // Verify smaller locktime fails
+    tx.nLockTime = 15;
+    BOOST_CHECK(!VerifyScript(CScript(), scriptSimpleLock, tx, 0, SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY, 0));
+
+    // Compare timestamps
+    int64 nNow = GetTime();
+    CScript scriptSimpleTimeLock = CScript() << nNow << OP_CHECKLOCKTIMEVERIFY;
+    tx.nLockTime = nNow;
+    BOOST_CHECK(VerifyScript(CScript(), scriptSimpleTimeLock, tx, 0, SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY, 0));
+    tx.nLockTime = nNow+1;
+    BOOST_CHECK(VerifyScript(CScript(), scriptSimpleTimeLock, tx, 0, SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY, 0));
+    tx.nLockTime = nNow-1;
+    BOOST_CHECK(!VerifyScript(CScript(), scriptSimpleTimeLock, tx, 0, SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY, 0));
+
+    // Verify comparing timestamps with block heights fails
+    tx.nLockTime = nNow;
+    BOOST_CHECK(!VerifyScript(CScript(), scriptSimpleLock, tx, 0, SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY, 0));
+    tx.nLockTime = 300000000; // very large block height
+    BOOST_CHECK(!VerifyScript(CScript(), scriptSimpleTimeLock, tx, 0, SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY, 0));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

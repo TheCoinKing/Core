@@ -1,33 +1,37 @@
-// Copyright (c) 2011-2014 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
 #ifndef BITCOINGUI_H
 #define BITCOINGUI_H
 
-#include "uint256.h"
-
-#if defined(HAVE_CONFIG_H)
-#include "bitcoin-config.h"
-#endif
-
+#include <QDesktopServices>
 #include <QMainWindow>
-#include <QMap>
 #include <QSystemTrayIcon>
+#include <QMap>
 
+class TransactionTableModel;
+class WalletFrame;
+class WalletView;
 class ClientModel;
+class WalletModel;
+class WalletStack;
+class TransactionView;
+class MintingView;
+class OverviewPage;
+class AddressBookPage;
+class SendCoinsDialog;
+class SignVerifyMessageDialog;
 class Notificator;
 class RPCConsole;
-class SendCoinsRecipient;
-class WalletFrame;
-class WalletModel;
 
 class CWallet;
 
 QT_BEGIN_NAMESPACE
-class QAction;
 class QLabel;
+class QModelIndex;
 class QProgressBar;
+class QStackedWidget;
+class QUrl;
+class QListWidget;
+class QPushButton;
+class QAction;
 QT_END_NAMESPACE
 
 /**
@@ -41,23 +45,31 @@ class BitcoinGUI : public QMainWindow
 public:
     static const QString DEFAULT_WALLET;
 
-    explicit BitcoinGUI(bool fIsTestnet = false, QWidget *parent = 0);
+    explicit BitcoinGUI(QWidget *parent = 0);
     ~BitcoinGUI();
 
     /** Set the client model.
         The client model represents the part of the core that communicates with the P2P network, and is wallet-agnostic.
     */
     void setClientModel(ClientModel *clientModel);
-
-#ifdef ENABLE_WALLET
     /** Set the wallet model.
         The wallet model represents a bitcoin wallet, and offers access to the list of transactions, address book and sending
         functionality.
     */
+
     bool addWallet(const QString& name, WalletModel *walletModel);
     bool setCurrentWallet(const QString& name);
+
     void removeAllWallets();
-#endif
+
+    /** Used by WalletView to allow access to needed QActions */
+    // Todo: Use Qt signals for these
+    QAction * getOverviewAction() { return overviewAction; }
+    QAction * getHistoryAction() { return historyAction; }
+    QAction * getMintingAction() { return mintingAction; }
+    QAction * getAddressBookAction() { return addressBookAction; }
+    QAction * getReceiveCoinsAction() { return receiveCoinsAction; }
+    QAction * getSendCoinsAction() { return sendCoinsAction; }
 
 protected:
     void changeEvent(QEvent *e);
@@ -71,7 +83,6 @@ private:
     WalletFrame *walletFrame;
 
     QLabel *labelEncryptionIcon;
-    QLabel *labelStakingIcon;    
     QLabel *labelConnectionsIcon;
     QLabel *labelBlocksIcon;
     QLabel *progressBarLabel;
@@ -80,10 +91,10 @@ private:
     QMenuBar *appMenuBar;
     QAction *overviewAction;
     QAction *historyAction;
+    QAction *mintingAction;
     QAction *quitAction;
     QAction *sendCoinsAction;
-    QAction *usedSendingAddressesAction;
-    QAction *usedReceivingAddressesAction;
+    QAction *addressBookAction;
     QAction *signMessageAction;
     QAction *verifyMessageAction;
     QAction *aboutAction;
@@ -91,55 +102,49 @@ private:
     QAction *optionsAction;
     QAction *toggleHideAction;
     QAction *encryptWalletAction;
+    QAction *decryptForMintingAction;
     QAction *backupWalletAction;
     QAction *changePassphraseAction;
-    QAction *unlockWalletAction;
-    QAction *lockWalletAction;
     QAction *aboutQtAction;
     QAction *openRPCConsoleAction;
-    QAction *openAction;
-    QAction *showHelpMessageAction;
+    QAction *openChatroomAction;
+    QAction *openForumAction;
 
     QSystemTrayIcon *trayIcon;
     Notificator *notificator;
+    TransactionView *transactionView;
+    MintingView *mintingView;
     RPCConsole *rpcConsole;
 
+    QMovie *syncIconMovie;
     /** Keep track of previous number of blocks, to detect progress */
     int prevBlocks;
-    int spinnerFrame;
-
-    /** PoSV: local weight for staking */
-    uint64_t nAverageWeight;
-    uint64_t nTotalWeight;
 
     /** Create the main UI actions. */
-    void createActions(bool fIsTestnet);
+    void createActions();
     /** Create the menu bar and sub-menus. */
     void createMenuBar();
     /** Create the toolbars */
     void createToolBars();
     /** Create system tray icon and notification */
-    void createTrayIcon(bool fIsTestnet);
+    void createTrayIcon();
     /** Create system tray menu (or setup the dock menu) */
     void createTrayIconMenu();
-
-    /** Enable or disable all wallet-related actions */
-    void setWalletActionsEnabled(bool enabled);
-
-    /** Connect core signals to GUI client */
-    void subscribeToCoreSignals();
-    /** Disconnect core signals from GUI client */
-    void unsubscribeFromCoreSignals();
-
-signals:
-    /** Signal raised when a URI was entered or dragged to the GUI */
-    void receivedURI(const QString &uri);
+    /** Save window size and position */
+    void saveWindowGeometry();
+    /** Restore window size and position */
+    void restoreWindowGeometry();
 
 public slots:
     /** Set number of connections shown in the UI */
     void setNumConnections(int count);
     /** Set number of blocks shown in the UI */
-    void setNumBlocks(int count);
+    void setNumBlocks(int count, int nTotalBlocks);
+    /** Set the encryption status as shown in the UI.
+       @param[in] status            current encryption status
+       @see WalletModel::EncryptionStatus
+    */
+    void setEncryptionStatus(int status);
 
     /** Notify the user of an event from the core network or transaction handling code.
        @param[in] title     the message box / notification title
@@ -149,26 +154,29 @@ public slots:
        @param[in] ret       pointer to a bool that will be modified to whether Ok was clicked (modal only)
     */
     void message(const QString &title, const QString &message, unsigned int style, bool *ret = NULL);
+    /** Asks the user whether to pay the transaction fee or to cancel the transaction.
+       It is currently not possible to pass a return value to another thread through
+       BlockingQueuedConnection, so an indirected pointer is used.
+       https://bugreports.qt-project.org/browse/QTBUG-10440
 
-#ifdef ENABLE_WALLET
-    /** Set the encryption status as shown in the UI.
-       @param[in] status            current encryption status
-       @see WalletModel::EncryptionStatus
+      @param[in] nFeeRequired       the required fee
+      @param[out] payFee            true to pay the fee, false to not pay the fee
     */
-    void setEncryptionStatus(int status);
-
-    bool handlePaymentRequest(const SendCoinsRecipient& recipient);
+    void askFee(qint64 nFeeRequired, bool *payFee);
+    void handleURI(QString strURI);
 
     /** Show incoming transaction notification for new transactions. */
     void incomingTransaction(const QString& date, int unit, qint64 amount, const QString& type, const QString& address);
-#endif
 
 private slots:
-#ifdef ENABLE_WALLET
     /** Switch to overview (home) page */
     void gotoOverviewPage();
     /** Switch to history (transactions) page */
     void gotoHistoryPage();
+    /** Switch to minting page */
+    void gotoMintingPage();
+    /** Switch to address book page */
+    void gotoAddressBookPage();
     /** Switch to receive coins page */
     void gotoReceiveCoinsPage();
     /** Switch to send coins page */
@@ -179,27 +187,24 @@ private slots:
     /** Show Sign/Verify Message dialog and switch to verify message tab */
     void gotoVerifyMessageTab(QString addr = "");
 
-    /** Show open dialog */
-    void openClicked();
-#endif
     /** Show configuration dialog */
     void optionsClicked();
     /** Show about dialog */
     void aboutClicked();
-    /** Show help message dialog */
-    void showHelpMessageClicked();
-// #ifndef Q_OS_MAC
+
+    // Open chatroom / forum URL in the system's browser.
+    void openChatroom();
+    void openForum();
+
+#ifndef Q_OS_MAC
     /** Handle tray icon clicked */
     void trayIconActivated(QSystemTrayIcon::ActivationReason reason);
-// #endif
+#endif
 
     /** Show window if hidden, unminimize when minimized, rise when obscured or show if hidden and fToggleHidden is true */
     void showNormalIfMinimized(bool fToggleHidden = false);
     /** Simply calls showNormalIfMinimized(true) for use in SLOT() macro */
     void toggleHidden();
-
-    void updateWeight();
-    void updateStakingIcon();
 
     /** called by a timer to check if fRequestShutdown has been set **/
     void detectShutdown();

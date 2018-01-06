@@ -1,6 +1,16 @@
+Copyright (c) 2009-2013 Bitcoin Developers
+
+Distributed under the MIT/X11 software license, see the accompanying
+file COPYING or http://www.opensource.org/licenses/mit-license.php.
+This product includes software developed by the OpenSSL Project for use in the [OpenSSL Toolkit](http://www.openssl.org/). This product includes
+cryptographic software written by Eric Young ([eay@cryptsoft.com](mailto:eay@cryptsoft.com)), and UPnP software written by Thomas Bernard.
+
+
+See readme-qt.rst for instructions on building Bitcoin-Qt, the
+graphical user interface.
+
 WINDOWS BUILD NOTES
 ===================
-
 
 Compilers Supported
 -------------------
@@ -12,12 +22,11 @@ Dependencies
 ------------
 Libraries you need to download separately and build:
 
-	name            default path               download
-	--------------------------------------------------------------------------------------------------------------------
-	OpenSSL         \openssl-1.0.1c-mgw        http://www.openssl.org/source/
-	Berkeley DB     \db-4.8.30.NC-mgw          http://www.oracle.com/technology/software/products/berkeley-db/index.html
-	Boost           \boost-1.50.0-mgw          http://www.boost.org/users/download/
-	miniupnpc       \miniupnpc-1.6-mgw         http://miniupnp.tuxfamily.org/files/
+                default path               download
+OpenSSL         \openssl-1.0.1g-mgw        http://www.openssl.org/source/
+Berkeley DB     \db-4.8.30.NC-mgw          http://www.oracle.com/technology/software/products/berkeley-db/index.html
+Boost           \boost-1.50.0-mgw          http://www.boost.org/users/download/
+miniupnpc       \miniupnpc-1.6-mgw         http://miniupnp.tuxfamily.org/files/
 
 Their licenses:
 
@@ -28,7 +37,7 @@ Their licenses:
 
 Versions used in this release:
 
-	OpenSSL      1.0.1c
+	OpenSSL      1.0.1g
 	Berkeley DB  4.8.30.NC
 	Boost        1.50.0
 	miniupnpc    1.6
@@ -41,7 +50,7 @@ MSYS shell:
 un-tar sources with MSYS 'tar xfz' to avoid issue with symlinks (OpenSSL ticket 2377)
 change 'MAKE' env. variable from 'C:\MinGW32\bin\mingw32-make.exe' to '/c/MinGW32/bin/mingw32-make.exe'
 
-	cd /c/openssl-1.0.1c-mgw
+	cd /c/openssl-1.0.1g-mgw
 	./config
 	make
 
@@ -55,7 +64,7 @@ MSYS shell:
 
 Boost
 -----
-MSYS shell:
+DOS prompt:
 
 	downloaded boost jam 3.1.18
 	cd \boost-1.50.0-mgw
@@ -72,12 +81,10 @@ MSYS shell:
 	mkdir miniupnpc
 	cp *.h miniupnpc/
 
-coinking
+Bitcoin
 -------
-MSYS shell:
+DOS prompt:
 
-	cd \coinking
-	sh autogen.sh
-	sh configure
-	mingw32-make
-	strip coinkingd.exe
+	cd \bitcoin\src
+	mingw32-make -f makefile.mingw
+	strip bitcoind.exe

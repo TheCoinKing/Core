@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Coin Control Address Selection</string>
+   <string>Coin Control</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -51,6 +51,12 @@
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="labelCoinControlQuantity">
+         <property name="font">
+          <font>
+           <family>Monospace</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
          <property name="cursor">
           <cursorShape>IBeamCursor</cursorShape>
          </property>
@@ -58,7 +64,7 @@
           <enum>Qt::ActionsContextMenu</enum>
          </property>
          <property name="text">
-          <string notr="true">0</string>
+          <string>0</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -80,6 +86,12 @@
        </item>
        <item row="1" column="1">
         <widget class="QLabel" name="labelCoinControlBytes">
+         <property name="font">
+          <font>
+           <family>Monospace</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
          <property name="cursor">
           <cursorShape>IBeamCursor</cursorShape>
          </property>
@@ -87,7 +99,7 @@
           <enum>Qt::ActionsContextMenu</enum>
          </property>
          <property name="text">
-          <string notr="true">0</string>
+          <string>0</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -125,6 +137,12 @@
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="labelCoinControlAmount">
+         <property name="font">
+          <font>
+           <family>Monospace</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
          <property name="cursor">
           <cursorShape>IBeamCursor</cursorShape>
          </property>
@@ -132,7 +150,7 @@
           <enum>Qt::ActionsContextMenu</enum>
          </property>
          <property name="text">
-          <string notr="true">0.00 TKC</string>
+          <string>0.00 BTC</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -154,6 +172,12 @@
        </item>
        <item row="1" column="1">
         <widget class="QLabel" name="labelCoinControlPriority">
+         <property name="font">
+          <font>
+           <family>Monospace</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
          <property name="cursor">
           <cursorShape>IBeamCursor</cursorShape>
          </property>
@@ -161,7 +185,7 @@
           <enum>Qt::ActionsContextMenu</enum>
          </property>
          <property name="text">
-          <string notr="true">medium</string>
+          <string/>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -199,6 +223,12 @@
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="labelCoinControlFee">
+         <property name="font">
+          <font>
+           <family>Monospace</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
          <property name="cursor">
           <cursorShape>IBeamCursor</cursorShape>
          </property>
@@ -206,7 +236,7 @@
           <enum>Qt::ActionsContextMenu</enum>
          </property>
          <property name="text">
-          <string notr="true">0.00 TKC</string>
+          <string>0.00 BTC</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -234,6 +264,12 @@
          <property name="enabled">
           <bool>false</bool>
          </property>
+         <property name="font">
+          <font>
+           <family>Monospace</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
          <property name="cursor">
           <cursorShape>IBeamCursor</cursorShape>
          </property>
@@ -241,7 +277,7 @@
           <enum>Qt::ActionsContextMenu</enum>
          </property>
          <property name="text">
-          <string notr="true">no</string>
+          <string>no</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -279,6 +315,12 @@
        </item>
        <item row="0" column="1">
         <widget class="QLabel" name="labelCoinControlAfterFee">
+         <property name="font">
+          <font>
+           <family>Monospace</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
          <property name="cursor">
           <cursorShape>IBeamCursor</cursorShape>
          </property>
@@ -286,7 +328,7 @@
           <enum>Qt::ActionsContextMenu</enum>
          </property>
          <property name="text">
-          <string notr="true">0.00 TKC</string>
+          <string>0.00 BTC</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -314,6 +356,12 @@
          <property name="enabled">
           <bool>false</bool>
          </property>
+         <property name="font">
+          <font>
+           <family>Monospace</family>
+           <pointsize>10</pointsize>
+          </font>
+         </property>
          <property name="cursor">
           <cursorShape>IBeamCursor</cursorShape>
          </property>
@@ -321,7 +369,7 @@
           <enum>Qt::ActionsContextMenu</enum>
          </property>
          <property name="text">
-          <string notr="true">0.00 TKC</string>
+          <string>0.00 BTC</string>
          </property>
          <property name="textInteractionFlags">
           <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
@@ -346,77 +394,76 @@
      <property name="frameShadow">
       <enum>QFrame::Sunken</enum>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayoutPanel" stretch="0,0,0,0,0">
-        <property name="spacing">
-         <number>14</number>
-        </property>
-        <item>
-         <widget class="QPushButton" name="pushButtonSelectAll">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>(un)select all</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="radioTreeMode">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>Tree mode</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QRadioButton" name="radioListMode">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string>List mode</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="labelLocked">
-          <property name="text">
-           <string notr="true">(1 locked)</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </item>
-     </layout>
+     <widget class="QWidget" name="horizontalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>781</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayoutPanel" stretch="0,0,0,0">
+       <property name="spacing">
+        <number>14</number>
+       </property>
+       <item>
+        <widget class="QPushButton" name="pushButtonSelectAll">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>(un)select all</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioTreeMode">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Tree mode</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="radioListMode">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>List mode</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>
@@ -471,12 +518,12 @@
      </column>
      <column>
       <property name="text">
-       <string>Priority</string>
+       <string>Coin days</string>
       </property>
      </column>
      <column>
       <property name="text">
-       <string/>
+       <string>Priority</string>
       </property>
      </column>
      <column>

@@ -1,15 +1,7 @@
-// Copyright (c) 2011-2013 The Bitcoin developers
-// Distributed under the MIT/X11 software license, see the accompanying
-// file COPYING or http://www.opensource.org/licenses/mit-license.php.
-
 #ifndef OPTIONSMODEL_H
 #define OPTIONSMODEL_H
 
 #include <QAbstractListModel>
-
-QT_BEGIN_NAMESPACE
-class QNetworkProxy;
-QT_END_NAMESPACE
 
 /** Interface from Qt to configuration data structure for Bitcoin client.
    To Qt, the options are presented as a list with the different options
@@ -25,28 +17,27 @@ public:
     explicit OptionsModel(QObject *parent = 0);
 
     enum OptionID {
-        StartAtStartup,         // bool
-        MinimizeToTray,         // bool
-        MapPortUPnP,            // bool
-        MinimizeOnClose,        // bool
-        ProxyUse,               // bool
-        ProxyIP,                // QString
-        ProxyPort,              // int
-        ProxySocksVersion,      // int
-        Fee,                    // qint64
-        DisplayUnit,            // BitcoinUnits::Unit
-        DisplayAddresses,       // bool
-        ThirdPartyTxUrls,       // QString
-        Language,               // QString
-        CoinControlFeatures,    // bool
-        ThreadsScriptVerif,     // int
-        DatabaseCache,          // int
-        SpendZeroConfChange,    // bool
+        StartAtStartup,    // bool
+        MinimizeToTray,    // bool
+        MapPortUPnP,       // bool
+        MinimizeOnClose,   // bool
+        ProxyUse,          // bool
+        ProxyIP,           // QString
+        ProxyPort,         // int
+        ProxySocksVersion, // int
+        DisplayUnit,       // BitcoinUnits::Unit
+        DisplayAddresses,  // bool
+        Language,          // QString
+        CoinControlFeatures, // bool
+        CheckpointEnforce, // bool
         OptionIDRowCount,
     };
 
     void Init();
     void Reset();
+
+    /* Migrate settings from wallet.dat after app initialization */
+    bool Upgrade(); /* returns true if settings upgraded */
 
     int rowCount(const QModelIndex & parent = QModelIndex()) const;
     QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
@@ -57,33 +48,26 @@ public:
     bool getMinimizeOnClose() { return fMinimizeOnClose; }
     int getDisplayUnit() { return nDisplayUnit; }
     bool getDisplayAddresses() { return bDisplayAddresses; }
-    QString getThirdPartyTxUrls() { return strThirdPartyTxUrls; }
-    bool getProxySettings(QNetworkProxy& proxy) const;
-    bool getCoinControlFeatures() { return fCoinControlFeatures; }
-    const QString& getOverriddenByCommandLine() { return strOverriddenByCommandLine; }
+    QString getLanguage() { return language; }
 
-    /* Restart flag helper */
-    void setRestartRequired(bool fRequired);
-    bool isRestartRequired();
+    bool getCoinControlFeatures() { return fCoinControlFeatures; }
+
+    bool getCheckpointEnforce() { return fCheckpointEnforce; }
 
 private:
-    /* Qt-only settings */
-    bool fMinimizeToTray;
-    bool fMinimizeOnClose;
-    QString language;
     int nDisplayUnit;
     bool bDisplayAddresses;
-    QString strThirdPartyTxUrls;
-    bool fCoinControlFeatures;
-    /* settings that were overriden by command-line */
-    QString strOverriddenByCommandLine;
+    bool fMinimizeToTray;
+    bool fMinimizeOnClose;
 
-    /// Add option to list of GUI options overridden through command line/config file
-    void addOverriddenOption(const std::string &option);
+    bool fCoinControlFeatures;
+
+    QString language;
+
+    bool fCheckpointEnforce;
 
 signals:
     void displayUnitChanged(int unit);
-    void transactionFeeChanged(qint64);
     void coinControlFeaturesChanged(bool);
 };
 

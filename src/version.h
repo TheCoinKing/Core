@@ -1,11 +1,11 @@
 // Copyright (c) 2012 The Bitcoin developers
+// Copyright (c) 2012-2017 The coinking developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 #ifndef BITCOIN_VERSION_H
 #define BITCOIN_VERSION_H
 
 #include "clientversion.h"
-
 #include <string>
 
 //
@@ -22,23 +22,22 @@ extern const std::string CLIENT_NAME;
 extern const std::string CLIENT_BUILD;
 extern const std::string CLIENT_DATE;
 
-// PoSV
-// nTime field added to CTransaction
-// vchBlockSig field added to CBlock
-static const int POW_TX_VERSION = 1;
-static const int POW_BLOCK_VERSION = 2;
+static const int coinking_VERSION =
+                           1000000 * coinking_VERSION_MAJOR
+                         +   10000 * coinking_VERSION_MINOR
+                         +     100 * coinking_VERSION_REVISION
+                         +       1 * coinking_VERSION_BUILD;
 
 //
 // network protocol versioning
 //
 
-static const int PROTOCOL_VERSION = 80000;
+static const int PROTOCOL_VERSION = 70001;
 
-// intial proto version, to be increased after version/verack negotiation
-static const int INIT_PROTO_VERSION = 209;
-
-// disconnect from peers older than this proto version
-static const int MIN_PEER_PROTO_VERSION = 80000;
+// earlier versions not supported as of Feb 2012, and are disconnected
+// NOTE: as of bitcoin v0.6 message serialization (vSend, vRecv) still
+// uses MIN_PROTO_VERSION(209), where message format uses PROTOCOL_VERSION
+static const int MIN_PROTO_VERSION = 209;
 
 // nTime field added to CAddress, starting with this version;
 // if possible, avoid requesting addresses nodes older than this
