@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=coinking
+Comment=Core wallet for coinking P2P Cryptocurrency
+Comment[de]=Offizieller Client für die Kryptowährung coinking
+Exec=/usr/bin/coinking-qt %u
+Terminal=false
+Type=Application
+Icon=/usr/share/pixmaps/coinking.png
+MimeType=x-scheme-handler/coinking;
+Categories=Application;Network;

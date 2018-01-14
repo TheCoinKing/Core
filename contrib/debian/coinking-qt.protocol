@@ -1,0 +1,11 @@
+[Protocol]
+exec=coinking-qt '%u'
+protocol=coinking
+input=none
+output=none
+helper=true
+listing=
+reading=false
+writing=false
+makedir=false
+deleting=false
