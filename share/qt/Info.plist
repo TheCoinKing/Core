@@ -2,34 +2,45 @@
 <!DOCTYPE plist SYSTEM "file://localhost/System/Library/DTDs/PropertyList.dtd">
 <plist version="0.9">
 <dict>
-	<key>CFBundleIconFile</key>
-	<string>coinking.icns</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleGetInfoString</key>
-	<string>$VERSION, Copyright © 2009-$YEAR The Bitcoin developers</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$VERSION</string>
-	<key>CFBundleVersion</key>
-	<string>$VERSION</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
-	<key>CFBundleExecutable</key>
-	<string>coinking-Qt</string>
-	<key>CFBundleIdentifier</key>
-	<string>org.bitcoinfoundation.Bitcoin-Qt</string>
-        <key>CFBundleURLTypes</key>
-        <array>
-          <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLName</key>
-            <string>org.bitcoinfoundation.BitcoinPayment</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-              <string>bitcoin</string>
-            </array>
-          </dict>
-        </array>
+  <key>LSMinimumSystemVersion</key>
+  <string>10.6.0</string>
+
+  <key>LSArchitecturePriority</key>
+  <array>
+    <string>x86_64</string>
+  </array>
+
+  <key>CFBundleIconFile</key>
+  <string>ppcoin.icns</string>
+
+  <key>CFBundlePackageType</key>
+  <string>APPL</string>
+
+  <key>CFBundleGetInfoString</key>
+  <string>0.6.0, Copyright © 2009-2017 The Bitcoin Core developers</string>
+
+  <key>CFBundleShortVersionString</key>
+  <string>0.6.0</string>
+
+  <key>CFBundleVersion</key>
+  <string>0.6.0</string>
+
+  <key>CFBundleSignature</key>
+  <string>????</string>
+
+  <key>CFBundleExecutable</key>
+  <string>Peercoin-Qt</string>
+
+  <key>CFBundleIdentifier</key>
+  <string>org.peercoin.Peercoin-Qt</string>
+
+  <key>NSPrincipalClass</key>
+    <string>NSApplication</string>
+
+  <key>NSHighResolutionCapable</key>
+    <string>True</string>
+
+  <key>LSApplicationCategoryType</key>
+    <string>public.app-category.finance</string>
 </dict>
 </plist>
