@@ -107,7 +107,6 @@ version.o: obj/build.h
 libcoinking_server_a_SOURCES = \
   addrman.cpp \
   alert.cpp \
-  rpcserver.cpp \
   bloom.cpp \
   checkpoints.cpp \
   checkpointsync.cpp \
@@ -122,7 +121,6 @@ libcoinking_server_a_SOURCES = \
   rpcblockchain.cpp \
   rpcnet.cpp \
   rpcrawtransaction.cpp \
-  rpcserver.cpp \
   txdb.cpp \
   $(JSON_H) \
   $(BITCOIN_CORE_H)
