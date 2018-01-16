@@ -1150,13 +1150,20 @@ int64 GetProofOfWorkReward(unsigned int nBits)
     if (fDebug && GetBoolArg("-printcreation"))
         printf("GetProofOfWorkReward() : create=%s nBits=0x%08x nSubsidy=%" PRI64d"\n", FormatMoney(nSubsidy).c_str(), nBits, nSubsidy);
 
+    if(nBestHeight < 1){
+        return 2.65 * COIN;
+    }
+    // You get 1 or 2 utkc or less
     return min(nSubsidy, MAX_MINT_PROOF_OF_WORK);
 }
 
 // tkcoin: miner's coin stake is rewarded based on coin age spent (coin-days)
 int64 GetProofOfStakeReward(int64 nCoinAge)
 {
-    static int64 nRewardCoinYear = CENT;  // creation amount per coin-year
+    //Assuming 2.65 coins at start we want a total circulation of 25 after ~12 months
+    //Per coin one cent will be created with peercoin so the amount of coins will increase by a factor of 1.10x
+    //Giving 10% profit from staking per year. We need 943.3% profit, so that would make it 943 * COIN nRewardCoinYear
+    static int64 nRewardCoinYear = 943 * COIN;  // creation amount per coin-year
     int64 nSubsidy = nCoinAge * 33 / (365 * 33 + 8) * nRewardCoinYear;
     if (fDebug && GetBoolArg("-printcreation"))
         printf("GetProofOfStakeReward(): create=%s nCoinAge=%" PRI64d"\n", FormatMoney(nSubsidy).c_str(), nCoinAge);
@@ -1277,6 +1284,10 @@ int GetNumBlocksOfPeers()
 
 bool IsInitialBlockDownload()
 {
+    #ifdef TESTING
+    return false;
+    #endif
+
     if (pindexBest == NULL || fImporting || fReindex || nBestHeight < Checkpoints::GetTotalBlocksEstimate())
         return true;
     static int64 nLastUpdate;
@@ -3263,7 +3274,7 @@ bool InitBlockIndex() {
         //   vMerkleTree: 4a5e1e
 
         // Genesis block
-        const char* pszTimestamp = "BBC 05-Jan-2018 Egypt's Grand Mufti endorses Bitcoin trading ban";
+        const char* pszTimestamp = "16 jan 2018";
         CTransaction txNew;
         txNew.nTime = 1515175990;
         txNew.vin.resize(1);
@@ -3275,17 +3286,17 @@ bool InitBlockIndex() {
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1515177990;
+        block.nTime    = 1516105424;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
         block.nNonce   = 684121426;
 
         if (fTestNet)
         {
-            block.nTime    = 1515177979;
+            block.nTime    = 1516105424;
             block.nNonce   = 122894938;
         }
 
-//#ifdef TESTING
+#ifdef TESTING
         CBigNum bnTarget;
         bnTarget.SetCompact(block.nBits);
         while (block.GetHash() > bnTarget.getuint256())
@@ -3296,7 +3307,7 @@ bool InitBlockIndex() {
             block.nNonce++;
         }
         printf("n=%dM hash=%s\n", block.nNonce, block.GetHash().ToString().c_str());
-//#endif
+#endif
 
         //// debug print
         uint256 hash = block.GetHash();
