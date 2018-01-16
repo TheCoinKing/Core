@@ -54,7 +54,6 @@ BITCOIN_CORE_H = \
   bignum.h \
   rpcclient.h \
   rpcprotocol.h \
-  rpcserver.h \
   bloom.h \
   checkpoints.h \
   checkpointsync.h \
