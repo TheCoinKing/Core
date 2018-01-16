@@ -15,7 +15,7 @@ if [ $# -lt 2 ]; then
   exit 1
 fi
 
-DISTDIR=peercoin-0.6.0
+DISTDIR=coinking-0.6.0
 
 cd /g/GeneralProjects/Core
 make distdir

@@ -1161,7 +1161,7 @@ int64 GetProofOfWorkReward(unsigned int nBits)
 int64 GetProofOfStakeReward(int64 nCoinAge)
 {
     //Assuming 2.65 coins at start we want a total circulation of 25 after ~12 months
-    //Per coin one cent will be created with peercoin so the amount of coins will increase by a factor of 1.10x
+    //Per coin one cent will be created with coinking so the amount of coins will increase by a factor of 1.10x
     //Giving 10% profit from staking per year. We need 943.3% profit, so that would make it 943 * COIN nRewardCoinYear
     static int64 nRewardCoinYear = 943 * COIN;  // creation amount per coin-year
     int64 nSubsidy = nCoinAge * 33 / (365 * 33 + 8) * nRewardCoinYear;
@@ -3286,13 +3286,13 @@ bool InitBlockIndex() {
         block.hashPrevBlock = 0;
         block.hashMerkleRoot = block.BuildMerkleTree();
         block.nVersion = 1;
-        block.nTime    = 1516105424;
+        block.nTime    = 1515177990;
         block.nBits    = bnProofOfWorkLimit.GetCompact();
         block.nNonce   = 684121426;
 
         if (fTestNet)
         {
-            block.nTime    = 1516105424;
+            block.nTime    = 1515177979;
             block.nNonce   = 122894938;
         }
 

@@ -1,47 +1,67 @@
 
-CoinKing Official Development Repo
+coinking Official Development Repo
 ==================================
 
-### What Is CoinKing?
-	- coming soon
-### CoinKing Resources
-	- coming soon
-Roadmap
-================================
-The road-map for TheCoinKing
+### What is coinking?
+[coinking](https://coinking.net) (abbreviated PPC), also known as PPCoin and Peer-to-Peer Coin is the first [cryptocurrency](https://en.wikipedia.org/wiki/Cryptocurrency) design introducing [proof-of-stake consensus](https://coinking.net/assets/paper/coinking-paper.pdf) as a security model, with a combined [proof-of-stake](https://coinking.net/assets/paper/coinking-paper.pdf)/[proof-of-work](https://en.wikipedia.org/wiki/Proof-of-work_system) minting system. coinking is based on [Bitcoin](https://bitcoin.org), while introducing many important innovations to cryptocurrency field including new security model, energy efficiency, better minting model and more adaptive response to rapid change in network computation power.
 
-Q1 | 2018 // 12/31/2017
+### coinking Resources
+* Client and Source:
+[Client Binaries](https://coinking.net/download),
+[Source Code](https://github.com/coinking/coinking)
+* Documentation: [coinking Whitepaper](https://coinking.net/whitepaper),
+[coinking Wiki](https://github.com/coinking/coinking/wiki)
+* Help: 
+[Forum](https://talk.coinking.net),
+[Intro & Important Links](https://talk.coinking.net/t/what-is-coinking-intro-important-links/2889)
 
-Official Release Of TKC
-* Wallet Release
-	- windows wallet
-	- linux wallet
-*Block Explorer
-*Airdrop Form
-*Auction 1 TKC
-	- this will be used to get on stocks.exchange
-stocks.exchange
+Testing
+-------
 
-Q2 | 2018 // 12/31/2017
+Testing and code review is the bottleneck for development; we get more pull
+requests than we can review and test. Please be patient and help out, and
+remember this is a security-critical project where any mistake might cost people
+lots of money.
 
-* preANN website
-* whitepaper
-* full roadmap
-* preANN leaderboard
-* simple page with top 3 owners
-* preANN DCBP (Discord Bot Payments)
-	- beta 0.1.0 v
-	-!pay, !deposit !withdraw !donate
+### Automated Testing
 
+Developers are strongly encouraged to write unit tests for new code, and to
+submit new unit tests for old code.
 
-Exchange
-================================
-Goal: 0.2 btc
-Stocks.Exchange Collected from donations so far 0.1 - 0.13 btc
+Unit tests can be compiled and run (assuming they weren't disabled in configure) with:
+  make check
 
-Donate
-================================
-* Donation BTC: 16P1LmGQqF3sKuUMqsYMS5V5Yd1Rp94Zk8
-* Donation LTC: LgxNPy5kQxJ4mptiydFHGjpvMbaViv1hLR
-* Donation XSH: SNtt7r31kuda78XoDzvtis7HDTjn3JQJrn
-* Donation ETH: 0xb5dc5f03dd16a5523f9c5a516139758f728869e1
+Every pull request is built for both Windows and Linux on a dedicated server,
+and unit and sanity tests are automatically run. The binaries produced may be
+used for manual QA testing — a link to them will appear in a comment on the
+pull request posted by [BitcoinPullTester](https://github.com/BitcoinPullTester). See https://github.com/TheBlueMatt/test-scripts
+for the build/test scripts.
+
+### Manual Quality Assurance (QA) Testing
+
+Large changes should have a test plan, and should be tested by somebody other
+than the developer who wrote the code.
+
+* Developers work in their own forks, then submit pull requests when they think their feature or bug fix is ready.
+* If it is a simple/trivial/non-controversial change, then one of the development team members simply pulls it.
+* If it is a more complicated or potentially controversial change, then the change may be discussed in the pull request, or the requester may be asked to start a discussion in the [coinking Forum](https://talk.coinking.net) for a broader community discussion. 
+* The patch will be accepted if there is broad consensus that it is a good thing. Developers should expect to rework and resubmit patches if they don't match the project's coding conventions (see coding.txt) or are controversial.
+* From time to time a pull request will become outdated. If this occurs, and the pull is no longer automatically mergeable; a comment on the pull will be used to issue a warning of closure.  Pull requests closed in this manner will have their corresponding issue labeled 'stagnant'.
+* For development ideas and help see [here](https://talk.coinking.net/c/protocol).
+
+## Branches:
+
+### develop (all pull requests should go here)
+The develop branch is used by developers to merge their newly implemented features to.
+Pull requests should always be made to this branch (except for critical fixes), and could possibly break the code.
+The develop branch is therefore unstable and not guaranteed to work on any system.
+
+### master (only updated by group members)
+The master branch get's updates from tested states of the develop branch.
+Therefore, the master branch should contain functional but experimental code.
+
+### release-* (the official releases)
+The release branch is identified by it's major and minor version number e.g. `release-0.6`.
+The official release tags are always made on a release branch.
+Release branches will typically branch from or merge tested code from the master branch to freeze the code for release.
+Only critical patches can be applied through pull requests directly on this branch, all non critical features should follow the standard path through develop -> master -> release-*
