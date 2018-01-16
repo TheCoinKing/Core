@@ -26,22 +26,22 @@ $(LIBLEVELDB) $(LIBMEMENV):
 endif
 
 noinst_LIBRARIES = \
-  libcoinking_server.a \
-  libcoinking_common.a \
-  libcoinking_cli.a
+  libpeercoin_server.a \
+  libpeercoin_common.a \
+  libpeercoin_cli.a
 if ENABLE_WALLET
-noinst_LIBRARIES += libcoinking_wallet.a
+noinst_LIBRARIES += libpeercoin_wallet.a
 endif
 
 bin_PROGRAMS =
 TESTS =
 
 if BUILD_BITCOIND
-  bin_PROGRAMS += coinkingd
+  bin_PROGRAMS += peercoind
 endif
 
 if BUILD_BITCOIN_CLI
-  bin_PROGRAMS += coinking-cli
+  bin_PROGRAMS += peercoin-cli
 endif
 
 .PHONY: FORCE
@@ -54,6 +54,7 @@ BITCOIN_CORE_H = \
   bignum.h \
   rpcclient.h \
   rpcprotocol.h \
+  bitcoinrpc.h \
   bloom.h \
   checkpoints.h \
   checkpointsync.h \
@@ -103,9 +104,10 @@ obj/build.h: FORCE
 	  $(abs_top_srcdir)
 version.o: obj/build.h
 
-libcoinking_server_a_SOURCES = \
+libpeercoin_server_a_SOURCES = \
   addrman.cpp \
   alert.cpp \
+  bitcoinrpc.cpp \
   bloom.cpp \
   checkpoints.cpp \
   checkpointsync.cpp \
@@ -120,11 +122,12 @@ libcoinking_server_a_SOURCES = \
   rpcblockchain.cpp \
   rpcnet.cpp \
   rpcrawtransaction.cpp \
+  bitcoinrpc.cpp \
   txdb.cpp \
   $(JSON_H) \
   $(BITCOIN_CORE_H)
 
-libcoinking_wallet_a_SOURCES = \
+libpeercoin_wallet_a_SOURCES = \
   db.cpp \
   rpcdump.cpp \
   rpcmining.cpp \
@@ -136,7 +139,7 @@ libcoinking_wallet_a_SOURCES = \
   rpcwallet.cpp \
   $(BITCOIN_CORE_H)
 
-libcoinking_common_a_SOURCES = \
+libpeercoin_common_a_SOURCES = \
   hash.cpp \
   key.cpp \
   netbase.cpp \
@@ -147,41 +150,41 @@ libcoinking_common_a_SOURCES = \
   version.cpp \
   $(BITCOIN_CORE_H)
 
-libcoinking_cli_a_SOURCES = \
+libpeercoin_cli_a_SOURCES = \
   rpcclient.cpp \
   $(BITCOIN_CORE_H)
 
-nodist_libcoinking_common_a_SOURCES = $(top_srcdir)/src/obj/build.h
+nodist_libpeercoin_common_a_SOURCES = $(top_srcdir)/src/obj/build.h
 #
 
-# coinkingd binary #
-coinkingd_LDADD = \
-  libcoinking_server.a \
-  libcoinking_cli.a \
-  libcoinking_common.a \
+# peercoind binary #
+peercoind_LDADD = \
+  libpeercoin_server.a \
+  libpeercoin_cli.a \
+  libpeercoin_common.a \
   $(LIBLEVELDB) \
   $(LIBMEMENV) \
   $(BOOST_LIBS)
 if ENABLE_WALLET
-coinkingd_LDADD += libcoinking_wallet.a
+peercoind_LDADD += libpeercoin_wallet.a
 endif
-coinkingd_SOURCES = bitcoind.cpp
-coinkingd_LDFLAGS = $(AM_LDFLAGS)
+peercoind_SOURCES = bitcoind.cpp
+peercoind_LDFLAGS = $(AM_LDFLAGS)
 
 if TARGET_WINDOWS
-coinkingd_SOURCES += bitcoind-res.rc
+peercoind_SOURCES += bitcoind-res.rc
 endif
 
 AM_CPPFLAGS += $(BDB_CPPFLAGS)
-coinkingd_LDADD += $(BDB_LIBS)
+peercoind_LDADD += $(BDB_LIBS)
 
 # bitcoin-cli binary #
-coinking_cli_LDADD = libcoinking_cli.a libcoinking_common.a $(BOOST_LIBS)
-coinking_cli_SOURCES = bitcoin-cli.cpp
-coinking_cli_LDFLAGS = $(AM_LDFLAGS)
+peercoin_cli_LDADD = libpeercoin_cli.a libpeercoin_common.a $(BOOST_LIBS)
+peercoin_cli_SOURCES = bitcoin-cli.cpp
+peercoin_cli_LDFLAGS = $(AM_LDFLAGS)
 
 if TARGET_WINDOWS
-coinking_cli_SOURCES += bitcoin-cli-res.rc
+peercoin_cli_SOURCES += bitcoin-cli-res.rc
 endif
 
 CLEANFILES = leveldb/libleveldb.a leveldb/libmemenv.a *.gcda *.gcno
@@ -202,11 +205,11 @@ clean-local:
 	$(OBJC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	  $(CPPFLAGS) $(AM_CXXFLAGS) $(QT_INCLUDES) $(CXXFLAGS)  -c -o $@ $<
 
-LIBcoinking_SERVER=libcoinking_server.a
-LIBcoinking_WALLET=libcoinking_wallet.a
-LIBcoinking_COMMON=libcoinking_common.a
-LIBcoinking_CLI=libcoinking_cli.a
-LIBcoinkingQT=qt/libcoinkingqt.a
+LIBPEERCOIN_SERVER=libpeercoin_server.a
+LIBPEERCOIN_WALLET=libpeercoin_wallet.a
+LIBPEERCOIN_COMMON=libpeercoin_common.a
+LIBPEERCOIN_CLI=libpeercoin_cli.a
+LIBPEERCOINQT=qt/libpeercoinqt.a
 
 if ENABLE_TESTS
 include Makefile.test.include
